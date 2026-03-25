@@ -139,12 +139,20 @@
                         <option value="admin">Admin</option>
                     </select>
                 </div>
+                
+                <!-- UPDATED PRIVACY SECTION WITH LINKS -->
                 <div class="privacy-card">
                     <div class="checkbox-item">
                         <input type="checkbox" id="privacyCheck" required>
-                        <label>I agree to Privacy Policy</label>
+                        <label for="privacyCheck">
+                            I have read and agree to the 
+                            <a href="#" id="privacyPolicyLink" class="privacy-link">Privacy Policy</a> 
+                            and 
+                            <a href="#" id="termsLink" class="privacy-link">Terms of Service</a>
+                        </label>
                     </div>
                 </div>
+                
                 <button type="submit" class="btn-submit" id="registerBtn">Create Account</button>
                 <div class="login-link">
                     Already have an account? <a href="#" id="showLoginBtn">Sign in</a>
@@ -391,6 +399,59 @@
         </div>
     </div>
 
+    <!-- ===== NEW: PRIVACY POLICY MODAL ===== -->
+    <div id="privacyModal" class="policy-modal">
+        <div class="policy-modal-content">
+            <span class="close-modal" id="closePrivacyModal">&times;</span>
+            <h2>📜 Privacy Policy</h2>
+            <div class="policy-text">
+                <h3>1. Information We Collect</h3>
+                <p>We collect your name, email, birthdate, and address to create your community profile. Profile pictures and bio are optional.</p>
+                
+                <h3>2. How We Use Your Data</h3>
+                <p>Your information is used to display your profile, show your posts, and connect you with other community members.</p>
+                
+                <h3>3. Data Storage</h3>
+                <p>All data is stored locally on your device using localStorage. No data is sent to external servers.</p>
+                
+                <h3>4. Your Rights</h3>
+                <p>You can edit or delete your profile and posts at any time. You can also delete your account by contacting the admin.</p>
+                
+                <h3>5. Data Security</h3>
+                <p>Your password is encrypted. No one can access your account without your password.</p>
+            </div>
+            <button class="close-policy-btn" id="agreePrivacyBtn">I Understand & Agree</button>
+        </div>
+    </div>
+
+    <!-- ===== NEW: TERMS OF SERVICE MODAL ===== -->
+    <div id="termsModal" class="policy-modal">
+        <div class="policy-modal-content">
+            <span class="close-modal" id="closeTermsModal">&times;</span>
+            <h2>📜 Terms of Service</h2>
+            <div class="policy-text">
+                <h3>1. Acceptance of Terms</h3>
+                <p>By using this Community Network, you agree to these terms.</p>
+                
+                <h3>2. Community Guidelines</h3>
+                <p>Be respectful. No harassment, hate speech, bullying, or spam. Posts containing inappropriate content will be removed.</p>
+                
+                <h3>3. Content Ownership</h3>
+                <p>You own your content. You grant the community permission to display your posts within this platform.</p>
+                
+                <h3>4. Admin Rights</h3>
+                <p>Admins may remove any content that violates guidelines and may suspend users who repeatedly violate terms.</p>
+                
+                <h3>5. Account Responsibility</h3>
+                <p>You are responsible for your account security. Do not share your password.</p>
+                
+                <h3>6. Changes to Terms</h3>
+                <p>Terms may be updated. Continued use means acceptance of updated terms.</p>
+            </div>
+            <button class="close-terms-btn" id="agreeTermsBtn">I Understand & Agree</button>
+        </div>
+    </div>
+
     <script>
         // PWA Service Worker Registration
         if ('serviceWorker' in navigator) {
@@ -400,6 +461,80 @@
                     .catch(err => console.log('❌ Service Worker failed:', err));
             });
         }
+        
+        // ===== NEW: PRIVACY & TERMS MODAL HANDLERS =====
+        const privacyModal = document.getElementById('privacyModal');
+        const termsModal = document.getElementById('termsModal');
+        const privacyLink = document.getElementById('privacyPolicyLink');
+        const termsLink = document.getElementById('termsLink');
+        const closePrivacy = document.getElementById('closePrivacyModal');
+        const closeTerms = document.getElementById('closeTermsModal');
+        const agreePrivacyBtn = document.getElementById('agreePrivacyBtn');
+        const agreeTermsBtn = document.getElementById('agreeTermsBtn');
+        const privacyCheckbox = document.getElementById('privacyCheck');
+        
+        // Open Privacy Modal when clicking link
+        if (privacyLink) {
+            privacyLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                privacyModal.style.display = 'flex';
+            });
+        }
+        
+        // Open Terms Modal when clicking link
+        if (termsLink) {
+            termsLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                termsModal.style.display = 'flex';
+            });
+        }
+        
+        // Close Privacy Modal
+        if (closePrivacy) {
+            closePrivacy.addEventListener('click', function() {
+                privacyModal.style.display = 'none';
+            });
+        }
+        
+        // Close Terms Modal
+        if (closeTerms) {
+            closeTerms.addEventListener('click', function() {
+                termsModal.style.display = 'none';
+            });
+        }
+        
+        // Agree from Privacy Modal - checks the checkbox
+        if (agreePrivacyBtn) {
+            agreePrivacyBtn.addEventListener('click', function() {
+                privacyModal.style.display = 'none';
+                if (privacyCheckbox) {
+                    privacyCheckbox.checked = true;
+                    // Optional: show a toast message
+                    if (typeof showToast === 'function') {
+                        showToast('✓ You have agreed to the Privacy Policy');
+                    }
+                }
+            });
+        }
+        
+        // Agree from Terms Modal - checks the checkbox
+        if (agreeTermsBtn) {
+            agreeTermsBtn.addEventListener('click', function() {
+                termsModal.style.display = 'none';
+                if (privacyCheckbox) {
+                    privacyCheckbox.checked = true;
+                    if (typeof showToast === 'function') {
+                        showToast('✓ You have agreed to the Terms of Service');
+                    }
+                }
+            });
+        }
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === privacyModal) privacyModal.style.display = 'none';
+            if (e.target === termsModal) termsModal.style.display = 'none';
+        });
     </script>
 </body>
 </html>
