@@ -1,4 +1,3 @@
-// ===== COMMUNITY NETWORK - COMPLETE SCRIPT =====
 (function() {
     // ===== DATA STORAGE =====
     let currentUser = null;
@@ -28,7 +27,6 @@
     }
     initData();
 
-    // ===== HELPER FUNCTIONS =====
     function showToast(msg, isError = false) {
         const toast = document.getElementById('toast');
         if (!toast) return;
@@ -50,7 +48,7 @@
         if (overlay) overlay.style.display = 'none';
     }
 
-    // ===== ADDRESS DATA (Complete PH) =====
+    // ===== ADDRESS DATA =====
     const provincesByRegion = {
         'NCR': ['Metro Manila'],
         'CAR': ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'],
@@ -457,7 +455,6 @@
         });
     }
 
-    // Close modal when clicking outside
     window.addEventListener('click', function(e) {
         if (e.target === editProfileModal) {
             editProfileModal.style.display = 'none';
@@ -613,6 +610,7 @@
         const createTabEl = document.getElementById('createTab');
         const pendingTabEl = document.getElementById('pendingTab');
         const chatViewEl = document.getElementById('chatView');
+        const profilePageTabEl = document.getElementById('profilePageTab');
         
         if (postsTabEl) postsTabEl.style.display = 'none';
         if (membersTabEl) membersTabEl.style.display = 'none';
@@ -620,6 +618,7 @@
         if (createTabEl) createTabEl.style.display = 'none';
         if (pendingTabEl) pendingTabEl.style.display = 'none';
         if (chatViewEl) chatViewEl.style.display = 'none';
+        if (profilePageTabEl) profilePageTabEl.style.display = 'none';
         
         if (tab === 'posts') {
             if (tabPosts) tabPosts.classList.add('active');
@@ -667,11 +666,11 @@
             html += `
                 <div class="post-card">
                     <div class="post-header">
-                        <div class="post-avatar" onclick="openChat('${post.author}')" style="background-image: url('${authorProfilePic || ''}'); background-size: cover; background-position: center;">
+                        <div class="post-avatar" onclick="viewProfile('${post.author}')" style="background-image: url('${authorProfilePic || ''}'); background-size: cover; background-position: center;">
                             ${!authorProfilePic ? post.authorName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() : ''}
                         </div>
                         <div>
-                            <div class="post-author" onclick="openChat('${post.author}')">${post.authorName}</div>
+                            <div class="post-author" onclick="viewProfile('${post.author}')">${post.authorName}</div>
                             <div class="post-date">${new Date(post.createdAt).toLocaleString()}</div>
                         </div>
                     </div>
@@ -749,7 +748,7 @@
             const profilePic = user.profilePicture;
             
             html += `
-                <div class="member-card" onclick="openChat('${user.email}')">
+                <div class="member-card" onclick="viewProfile('${user.email}')">
                     <div class="member-header">
                         <div class="member-avatar" style="background-image: url('${profilePic || ''}'); background-size: cover; background-position: center;">
                             ${!profilePic ? user.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() : ''}
@@ -1161,6 +1160,101 @@
             }
         });
     }
+
+    // ===== PROFILE PAGE FUNCTIONS =====
+    window.viewProfile = function(email) {
+        const users = getUsers();
+        const user = users.find(u => u.email === email);
+        if (!user) return;
+        
+        const allPosts = getPosts();
+        const userPosts = allPosts.filter(p => p.author === email && p.status === 'approved').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        const postCount = userPosts.length;
+        const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes?.length || 0), 0);
+        const joinDate = new Date(user.registeredAt).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        document.getElementById('postsTab').style.display = 'none';
+        document.getElementById('membersTab').style.display = 'none';
+        document.getElementById('messagesTab').style.display = 'none';
+        document.getElementById('createTab').style.display = 'none';
+        document.getElementById('pendingTab').style.display = 'none';
+        document.getElementById('chatView').style.display = 'none';
+        document.getElementById('profilePageTab').style.display = 'block';
+        
+        let postsHtml = '';
+        if (userPosts.length === 0) {
+            postsHtml = '<div class="empty-state">No posts yet</div>';
+        } else {
+            postsHtml = userPosts.map(post => `
+                <div class="profile-post-card">
+                    <div class="profile-post-content">${post.content}</div>
+                    <div class="profile-post-date">${new Date(post.createdAt).toLocaleString()}</div>
+                    <div style="margin-top: 8px;">
+                        <i class="fas fa-heart" style="color: #ef4444;"></i> ${post.likes?.length || 0} likes
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        const roleName = user.role === 'admin' ? 'Administrator' : (user.role === 'node-host' ? 'Node Host' : 'Community Member');
+        const profilePic = user.profilePicture;
+        
+        const profileHtml = `
+            <div class="profile-header-large">
+                <div class="profile-avatar-large" style="background-image: url('${profilePic || ''}'); background-size: cover; background-position: center;">
+                    ${!profilePic ? user.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() : ''}
+                </div>
+                <div class="profile-name-large">${user.fullName}</div>
+                <div class="profile-email-large">${user.email}</div>
+                <div class="role-badge-large">${roleName}</div>
+            </div>
+            
+            ${user.bio ? `<div class="profile-bio-large">${user.bio}</div>` : ''}
+            
+            <div class="profile-info-grid">
+                ${user.location ? `<div class="profile-info-item"><i class="fas fa-map-marker-alt"></i> ${user.location}</div>` : ''}
+                ${user.website ? `<div class="profile-info-item"><i class="fas fa-globe"></i> <a href="${user.website}" target="_blank" style="color: #3b82f6;">${user.website}</a></div>` : ''}
+                ${user.address?.city && user.address?.province ? `<div class="profile-info-item"><i class="fas fa-home"></i> ${user.address.city}, ${user.address.province}</div>` : ''}
+                <div class="profile-info-item"><i class="fas fa-calendar-alt"></i> Joined ${joinDate}</div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div class="profile-stat-number">${postCount}</div>
+                    <div class="profile-stat-label">Posts</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-number">${totalLikes}</div>
+                    <div class="profile-stat-label">Likes Received</div>
+                </div>
+            </div>
+            
+            <button class="profile-message-btn" onclick="openChatAndCloseProfile('${user.email}')">
+                <i class="fas fa-comment-dots"></i> Send Message
+            </button>
+            
+            <div class="profile-posts-section">
+                <h3>📝 ${user.fullName}'s Posts</h3>
+                <div class="profile-posts-grid">${postsHtml}</div>
+            </div>
+        `;
+        
+        document.getElementById('profilePageContent').innerHTML = profileHtml;
+    };
+
+    document.getElementById('closeProfilePageBtn').addEventListener('click', function() {
+        document.getElementById('profilePageTab').style.display = 'none';
+        document.getElementById('membersTab').style.display = 'block';
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('tabMembers').classList.add('active');
+        loadMembers();
+    });
+
+    window.openChatAndCloseProfile = function(email) {
+        document.getElementById('profilePageTab').style.display = 'none';
+        openChat(email);
+    };
 
     // ===== START MESSAGE CHECK =====
     function startMessageCheck() {
