@@ -941,3 +941,13 @@ label {
 ::-webkit-scrollbar-thumb:hover {
     background: #64748b;
   }
+/* Edit Profile Modal */
+#editProfileModal .form-card {
+    max-width: 400px;
+    margin: 0;
+}
+
+#editProfileModal textarea {
+    resize: vertical;
+    min-height: 80px;
+}
