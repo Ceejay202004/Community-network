@@ -1,4 +1,4 @@
-/* ===== COMPLETE STYLES FROM YOUR CODE ===== */
+/* ===== COMPLETE STYLES ===== */
 * {
     margin: 0;
     padding: 0;
@@ -476,6 +476,14 @@ label {
     text-overflow: ellipsis;
 }
 
+/* Member Bio - for profile info */
+.member-bio {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 4px;
+    line-height: 1.3;
+}
+
 .status-dot {
     width: clamp(8px, 1.5vw, 12px);
     height: clamp(8px, 1.5vw, 12px);
@@ -940,14 +948,4 @@ label {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #64748b;
-  }
-/* Edit Profile Modal */
-#editProfileModal .form-card {
-    max-width: 400px;
-    margin: 0;
-}
-
-#editProfileModal textarea {
-    resize: vertical;
-    min-height: 80px;
 }
