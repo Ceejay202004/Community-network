@@ -31,6 +31,10 @@
     <button class="menu-toggle" id="mobileMenuBtn" aria-label="Menu">
       <i class="fas fa-bars"></i>
     </button>
+    <!-- NEW: Dark Mode Toggle Button -->
+    <button class="dark-mode-toggle-nav" id="darkModeToggleNav" aria-label="Dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
     <div class="nav-links" id="navLinks">
       <a href="#" class="active" id="navHome">Home</a>
       <a href="#" id="navFeed">Feed</a>
@@ -78,7 +82,7 @@
 
   <!-- ==================== YOUR EXISTING APP (FULL FUNCTIONALITY) ==================== -->
   <div class="app-wrapper">
-    <!-- Loading Overlay (from original) -->
+    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
       <div class="loading-card">
         <div class="loading-spinner"></div>
@@ -214,7 +218,7 @@
       </form>
     </div>
 
-    <!-- Login Card (from original) -->
+    <!-- Login Card -->
     <div id="loginCard" class="form-card" style="display: none;">
       <h1>Welcome Back</h1>
       <div class="subtitle">Sign in to your account</div>
@@ -239,7 +243,7 @@
       </div>
     </div>
 
-    <!-- Main App (from original) -->
+    <!-- Main App -->
     <div id="mainAppCard" style="display: none;">
       <div class="app-grid">
         <!-- Left Sidebar -->
@@ -309,7 +313,6 @@
               <button class="tab-btn" id="tabPending" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px; display: none;">
                 <i class="fas fa-clock"></i> Pending Approval
               </button>
-              <!-- NEW: Events Tab Button -->
               <button class="tab-btn" id="tabEvents" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
                 <i class="fas fa-calendar-alt"></i> Events
               </button>
@@ -397,7 +400,7 @@
             <button id="closeProfilePageBtn" class="btn-small" style="background: #64748b; margin-top: 15px;">← Back to Members</button>
           </div>
 
-          <!-- NEW: Events Tab -->
+          <!-- Events Tab -->
           <div id="eventsTab" class="form-card" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
               <h2>📅 Community Events</h2>
@@ -407,7 +410,7 @@
           </div>
         </div>
 
-        <!-- Right Sidebar (original stats + online members) -->
+        <!-- Right Sidebar -->
         <div class="right-sidebar" style="display: none;">
           <div class="sidebar-card">
             <h3>📊 Community Stats</h3>
@@ -439,7 +442,7 @@
     <div class="toast-message" id="toast"></div>
   </div>
 
-  <!-- ==================== MODAL FOR PRIVACY POLICY / TERMS ==================== -->
+  <!-- ==================== MODALS ==================== -->
   <div id="privacyModal" class="policy-modal">
     <div class="policy-modal-content">
       <span class="close-modal" id="closePrivacyModal">&times;</span>
@@ -480,7 +483,6 @@
     </div>
   </div>
 
-  <!-- ==================== EDIT PROFILE MODAL (unchanged) ==================== -->
   <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 10001;">
     <div class="form-card" style="max-width: 400px; margin: 0;">
       <h3>✏️ Edit Profile</h3>
@@ -507,7 +509,6 @@
     </div>
   </div>
 
-  <!-- ==================== NEW: CREATE EVENT MODAL ==================== -->
   <div id="createEventModal" class="policy-modal" style="display: none;">
     <div class="policy-modal-content" style="max-width: 500px;">
       <span class="close-modal" id="closeEventModal">&times;</span>
@@ -568,7 +569,7 @@
 </footer>
 
 <script>
-  // ===== PWA & MODAL HANDLERS (keep your existing code) =====
+  // ===== PWA & MODAL HANDLERS (unchanged) =====
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
@@ -577,7 +578,7 @@
     });
   }
 
-  // ===== PRIVACY & TERMS MODAL HANDLERS (same as before) =====
+  // ===== PRIVACY & TERMS MODAL HANDLERS =====
   const privacyModal = document.getElementById('privacyModal');
   const termsModal = document.getElementById('termsModal');
   const privacyLink = document.getElementById('privacyPolicyLink');
@@ -639,8 +640,6 @@
     });
   }
 
-  // Update hero stats dynamically when user logs in (will be updated by your existing script)
-  // We'll also add a simple function to update the hero numbers from your app's data.
   function updateHeroStats(membersCount, postsCount) {
     const statMembers = document.getElementById('statMembersHero');
     const statPosts = document.getElementById('statPostsHero');
@@ -648,12 +647,6 @@
     if (statPosts) statPosts.textContent = postsCount;
   }
 
-  // Override the existing updateStats function to also update hero stats (if needed)
-  // Your existing script already updates #quickMembers and #quickPosts, so we can hook into that.
-  // But to avoid duplication, we'll rely on the existing stats updates; we just need to call updateHeroStats after they update.
-  // Since we can't modify script.js directly, we'll monkey-patch the function if it exists.
-  // Alternatively, we can add an event listener that listens to storage changes, but simpler: after page loads,
-  // we'll periodically check the quick stats elements and update hero stats.
   setInterval(() => {
     const quickMembers = document.getElementById('quickMembers');
     const quickPosts = document.getElementById('quickPosts');
