@@ -1894,6 +1894,85 @@ label {
 ::-webkit-scrollbar {
   width: 10px;
 }
+/* ==================== EVENTS STYLES ==================== */
+.events-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.event-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    border: 1px solid var(--gray-200);
+    transition: all 0.2s;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.event-header h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.event-date {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.event-desc {
+    color: #475569;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.event-location {
+    font-size: 0.9rem;
+    color: var(--primary);
+    margin: 8px 0;
+}
+
+.event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--gray-200);
+}
+
+.event-attendees {
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.rsvp-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+}
+
+.rsvp-btn.btn-leave {
+    background: #ef4444;
+}
+
+.delete-event-btn {
+    background: #ef4444;
+    margin-left: 8px;
+}
 
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
