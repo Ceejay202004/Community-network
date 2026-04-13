@@ -10,7 +10,7 @@
     const POSTS_KEY = 'cn_posts';
     const MESSAGES_KEY = 'cn_messages';
     const CONVERSATIONS_KEY = 'cn_conversations';
-    const EVENTS_KEY = 'cn_events';  // NEW
+    const EVENTS_KEY = 'cn_events';
 
     function initData() {
         if (!localStorage.getItem(USERS_KEY)) localStorage.setItem(USERS_KEY, JSON.stringify([]));
@@ -21,6 +21,36 @@
     }
     initData();
 
+    // ===== DARK MODE (NEW) =====
+    function initDarkMode() {
+        const isDark = localStorage.getItem('darkMode') === 'true';
+        if (isDark) {
+            document.body.classList.add('dark');
+            const toggleIcon = document.querySelector('#darkModeToggleNav i');
+            if (toggleIcon) toggleIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+        const toggleBtn = document.getElementById('darkModeToggleNav');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                const isDarkNow = document.body.classList.contains('dark');
+                localStorage.setItem('darkMode', isDarkNow);
+                const icon = toggleBtn.querySelector('i');
+                if (icon) {
+                    if (isDarkNow) {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                    } else {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                    }
+                }
+            });
+        }
+    }
+    initDarkMode();
+
+    // ===== HELPER FUNCTIONS =====
     function showToast(msg, isError = false) {
         const toast = document.getElementById('toast');
         if (!toast) return;
@@ -506,7 +536,7 @@
         document.getElementById('registrationCard').style.display = 'block';
     });
 
-    // ===== TAB NAVIGATION (UPDATED with events) =====
+    // ===== TAB NAVIGATION (WITH EVENTS) =====
     const tabPosts = document.getElementById('tabPosts');
     const tabMembers = document.getElementById('tabMembers');
     const tabMessages = document.getElementById('tabMessages');
@@ -1153,7 +1183,7 @@
     window.addEventListener('resize', checkScreenSize);
     checkScreenSize();
 
-    // ===== EVENTS FUNCTIONS (NEW) =====
+    // ===== EVENTS FUNCTIONS =====
     function getEvents() {
         return JSON.parse(localStorage.getItem(EVENTS_KEY)) || [];
     }
@@ -1265,7 +1295,6 @@
         });
     }
 
-    // ===== CREATE EVENT MODAL HANDLERS =====
     const createEventBtn = document.getElementById('createEventBtn');
     const createEventModal = document.getElementById('createEventModal');
     const closeEventModal = document.getElementById('closeEventModal');
