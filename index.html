@@ -3,323 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>CircleConnect • Community Network + Admin Dashboard</title>
+    <title>Community Network • CircleConnect</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CommNet">
     
     <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <!-- Main Styles (your existing external CSS) -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Extra styles for admin dashboard (will not break your design) -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            line-height: 1.5;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        body.dark {
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-
-        :root {
-            --primary: #4f46e5;
-            --primary-dark: #4338ca;
-            --primary-light: #eef2ff;
-            --secondary: #10b981;
-            --gray-50: #f9fafb;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-            --radius-lg: 1rem;
-            --radius-md: 0.75rem;
-        }
-
-        body.dark .navbar, body.dark .sidebar-card, body.dark .form-card, body.dark .post-card, body.dark .footer, body.dark .stats-row, body.dark .admin-dashboard {
-            background: #1e293b;
-            border-color: #334155;
-            color: #e2e8f0;
-        }
-
-        body.dark .btn-outline-light {
-            background: #334155;
-            border-color: #475569;
-            color: #e2e8f0;
-        }
-
-        body.dark .post-stats button, body.dark .stat-label, body.dark .author-info p, body.dark .event-info span, body.dark .group-info span {
-            color: #94a3b8;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: rgba(255,255,255,0.98);
-        }
-        body.dark .navbar {
-            background: #0f172a;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, #818cf8 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .logo i {
-            color: var(--primary);
-            margin-right: 6px;
-        }
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        .nav-links a {
-            text-decoration: none;
-            font-weight: 500;
-            color: var(--gray-700);
-        }
-        body.dark .nav-links a {
-            color: #cbd5e1;
-        }
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--primary);
-        }
-        .btn-outline-light {
-            border: 1px solid var(--gray-300);
-            background: white;
-            padding: 0.5rem 1.2rem;
-            border-radius: 2rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .dark-mode-toggle-nav {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-left: 0.5rem;
-        }
-
-        /* Hero */
-        .hero {
-            padding: 3rem 0 2rem;
-            background: linear-gradient(145deg, #ffffff 0%, #f9f5ff 100%);
-        }
-        body.dark .hero {
-            background: #0f172a;
-        }
-        .hero-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            align-items: center;
-        }
-        .hero-content {
-            flex: 1;
-        }
-        .hero-content h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-        }
-        .hero-stats {
-            display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 800;
-        }
-        .hero-illustration {
-            flex: 1;
-            background: var(--primary-light);
-            border-radius: 2rem;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        .hero-illustration i {
-            font-size: 6rem;
-            color: var(--primary);
-        }
-        .stats-row {
-            display: flex;
-            justify-content: space-around;
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 1.2rem;
-            margin: 1.5rem 0;
-            border: 1px solid var(--gray-200);
-            flex-wrap: wrap;
-        }
-
-        /* App Layout */
-        .app-wrapper {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-        .form-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .input-wrapper, .password-field {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: 1px solid var(--gray-300);
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-        }
-        .input-wrapper input, .password-field input {
-            border: none;
-            flex: 1;
-            outline: none;
-            background: transparent;
-        }
-        .btn-submit {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.7rem;
-            border-radius: 2rem;
-            width: 100%;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .app-grid {
-            display: grid;
-            grid-template-columns: 280px 1fr 280px;
-            gap: 1.5rem;
-        }
-        .sidebar-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 1rem;
-            border: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        .posts-grid, .members-grid, .events-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .post-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 1rem;
-            border: 1px solid var(--gray-200);
-        }
-        .post-author {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        .post-stats button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            margin-right: 1rem;
-        }
-        .like-btn.liked {
-            color: #ef4444;
-        }
-        .tab-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            width: 100%;
-            padding: 0.6rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            border-radius: 0.5rem;
-        }
-        .tab-btn.active {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        .logout-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 2rem;
-            margin-top: 1rem;
-            cursor: pointer;
-        }
+        /* Admin Dashboard specific styles - these only affect the dashboard panel */
         .admin-dashboard {
             display: none;
             background: white;
-            border-radius: var(--radius-lg);
-            padding: 1rem;
-            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
         .admin-dashboard.visible {
             display: block;
@@ -328,9 +38,10 @@
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
         .stat-card {
-            background: var(--gray-100);
+            background: #f1f5f9;
             padding: 0.8rem;
             border-radius: 0.5rem;
             flex: 1;
@@ -339,384 +50,778 @@
         .admin-table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 0.5rem;
         }
         .admin-table th, .admin-table td {
             padding: 0.5rem;
-            border-bottom: 1px solid var(--gray-200);
+            border-bottom: 1px solid #e2e8f0;
             text-align: left;
         }
         .action-btn {
             background: none;
             border: none;
-            color: var(--primary);
+            color: #4f46e5;
             cursor: pointer;
+            font-size: 0.8rem;
         }
         .action-btn.danger {
             color: #ef4444;
         }
-        .toast-message {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #333;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            display: none;
-            z-index: 1000;
-        }
-        @media (max-width: 768px) {
-            .app-grid {
-                grid-template-columns: 1fr;
-            }
-            .menu-toggle {
-                display: block;
-            }
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: white;
-                padding: 1rem;
-            }
-            .nav-links.show {
-                display: flex;
-            }
-            .hero-content h1 {
-                font-size: 1.8rem;
-            }
+        /* Make sure navbar button fits with your design */
+        #adminToggleBtn {
+            margin-left: 0.5rem;
         }
     </style>
 </head>
 <body>
 
+<!-- ==================== MODERN NAVBAR ==================== -->
 <nav class="navbar">
-    <div class="nav-container">
-        <div class="logo"><i class="fas fa-users"></i> CircleConnect</div>
-        <button class="menu-toggle" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
-        <button class="dark-mode-toggle-nav" id="darkModeToggle"><i class="fas fa-moon"></i></button>
-        <div class="nav-links" id="navLinks">
-            <a href="#" id="navHome">Home</a>
-            <a href="#" id="navFeedLink">Feed</a>
-            <button class="btn-outline-light" id="adminToggleBtn"><i class="fas fa-lock"></i> Admin Panel</button>
-            <button class="btn-outline-light" id="navSignInBtn">Sign in</button>
-            <button class="btn-primary" id="navJoinBtn">Join now</button>
-        </div>
+  <div class="nav-container">
+    <div class="logo">
+      <i class="fas fa-users"></i> CircleConnect
     </div>
+    <button class="menu-toggle" id="mobileMenuBtn" aria-label="Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- Dark Mode Toggle Button -->
+    <button class="dark-mode-toggle-nav" id="darkModeToggleNav" aria-label="Dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#" class="active" id="navHome">Home</a>
+      <a href="#" id="navFeed">Feed</a>
+      <a href="#" id="navGroups">Groups</a>
+      <a href="#" id="navEvents">Events</a>
+      <a href="#" id="navMembers">Members</a>
+      <!-- NEW: Admin Panel Button (only visible to admin) -->
+      <button class="btn-outline-light" id="adminToggleBtn" style="display: none;"><i class="fas fa-lock"></i> Admin Panel</button>
+      <button class="btn-outline-light" id="navSignInBtn"><i class="far fa-user-circle"></i> Sign in</button>
+      <button class="btn-primary" id="navJoinBtn">Join now</button>
+    </div>
+  </div>
 </nav>
 
 <main>
-    <div class="container">
-        <!-- Admin Dashboard (hidden initially) -->
-        <div id="adminDashboard" class="admin-dashboard">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2><i class="fas fa-chalkboard-user"></i> Admin Control</h2>
-                <button id="closeAdminBtn" class="btn-outline-light">Close</button>
-            </div>
-            <div class="admin-stats" id="adminStats"></div>
-            <h3>Reported Content</h3>
-            <table class="admin-table" id="reportedTable">
-                <thead><tr><th>Content</th><th>Reported By</th><th>Action</th></tr></thead>
-                <tbody></tbody>
-            </table>
-            <h3>Manage Users</h3>
-            <table class="admin-table" id="usersTable">
-                <thead><tr><th>Name</th><th>Role</th><th>Action</th></tr></thead>
-                <tbody></tbody>
-            </table>
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <h1>Where communities <br> grow together</h1>
+        <p>Connect, share, and build meaningful relationships in a vibrant digital space. Join thousands of members making an impact.</p>
+        <div class="hero-stats" id="heroStats">
+          <div class="stat"><span class="stat-number" id="statMembersHero">0</span><span class="stat-label">Active members</span></div>
+          <div class="stat"><span class="stat-number" id="statPostsHero">0</span><span class="stat-label">Community posts</span></div>
+          <div class="stat"><span class="stat-number" id="statGroupsHero">12</span><span class="stat-label">Interest groups</span></div>
         </div>
-
-        <!-- Registration Card -->
-        <div id="registrationCard" class="form-card">
-            <h1>Join CircleConnect</h1>
-            <form id="registerForm">
-                <div class="form-group"><label>Full Name</label><input type="text" id="fullName" required></div>
-                <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="password" required></div>
-                <div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPassword" required></div>
-                <div class="form-group"><label>Role</label><select id="userRole"><option value="member">Member</option><option value="admin">Admin</option></select></div>
-                <button type="submit" class="btn-submit">Create Account</button>
-                <p>Already have an account? <a href="#" id="showLoginBtn">Sign in</a></p>
-            </form>
+        <div style="margin-top: 1.5rem;">
+          <button class="btn-primary hero-cta" id="heroGetStartedBtn"><i class="fas fa-rocket"></i> Get started</button>
         </div>
-
-        <!-- Login Card -->
-        <div id="loginCard" class="form-card" style="display: none;">
-            <h1>Welcome Back</h1>
-            <form id="loginForm">
-                <div class="form-group"><label>Email</label><input type="email" id="loginEmail" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="loginPassword" required></div>
-                <button type="submit" class="btn-submit">Sign In</button>
-                <p>No account? <a href="#" id="showRegisterBtn">Register</a></p>
-            </form>
-        </div>
-
-        <!-- Main App (after login) -->
-        <div id="mainAppCard" style="display: none;">
-            <div class="app-grid">
-                <div class="sidebar">
-                    <div class="sidebar-card">
-                        <div id="userProfileSummary"></div>
-                        <button id="editProfileBtn" class="btn-outline-light" style="width:100%; margin:10px 0">Edit Profile</button>
-                        <div class="search-wrapper"><input type="text" id="searchInput" placeholder="Search posts..."></div>
-                        <button class="tab-btn active" id="tabPosts"><i class="fas fa-newspaper"></i> News Feed</button>
-                        <button class="tab-btn" id="tabMembers"><i class="fas fa-users"></i> Members</button>
-                        <button class="tab-btn" id="tabCreate"><i class="fas fa-pen"></i> Create Post</button>
-                        <button class="tab-btn" id="tabEvents"><i class="fas fa-calendar"></i> Events</button>
-                        <button class="logout-btn" id="logoutBtn">Logout</button>
-                    </div>
-                </div>
-                <div class="main-content">
-                    <div id="postsTab"><h2>News Feed</h2><div id="postsList" class="posts-grid"></div></div>
-                    <div id="membersTab" style="display:none;"><h2>Members</h2><div id="membersList" class="members-grid"></div></div>
-                    <div id="createTab" style="display:none;"><h2>Create Post</h2><textarea id="postContent" rows="3" style="width:100%"></textarea><button id="createPostBtn" class="btn-submit">Post</button></div>
-                    <div id="eventsTab" style="display:none;"><h2>Events</h2><button id="createEventBtn" class="btn-primary">+ New Event</button><div id="eventsList" class="events-grid"></div></div>
-                </div>
-                <div class="right-sidebar">
-                    <div class="sidebar-card"><h3>Community Stats</h3><div id="statsWidget"></div></div>
-                </div>
-            </div>
-        </div>
+      </div>
+      <div class="hero-illustration">
+        <i class="fas fa-comments"></i>
+        <p style="margin-top: 0.5rem; font-weight: 500;">"Real connections, real impact"</p>
+      </div>
     </div>
+  </section>
+
+  <!-- ==================== QUICK STATS ROW ==================== -->
+  <div class="container">
+    <div class="stats-row" id="statsRow">
+      <div><i class="fas fa-globe" style="color: var(--primary);"></i> <span id="statCountries">14+</span> Countries</div>
+      <div><i class="fas fa-calendar-week"></i> <span id="statMonthlyEvents">300+</span> Monthly Events</div>
+      <div><i class="fas fa-chalkboard-user"></i> <span id="statExpertHosts">45+</span> Expert Hosts</div>
+      <div><i class="fas fa-handshake"></i> <span id="statSatisfaction">92%</span> Member Satisfaction</div>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN DASHBOARD (NEW) ==================== -->
+  <div class="container">
+    <div id="adminDashboard" class="admin-dashboard">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2><i class="fas fa-chalkboard-user"></i> Admin Control Center</h2>
+        <button id="closeAdminBtn" class="btn-outline-light">Close</button>
+      </div>
+      <div class="admin-stats" id="adminStats"></div>
+      <h3>Manage Users</h3>
+      <table class="admin-table" id="usersTable">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <h3>Reported Content (Demo)</h3>
+      <table class="admin-table" id="reportsTable">
+        <thead><tr><th>Post</th><th>Reported By</th><th>Action</th></tr></thead>
+        <tbody><tr><td colspan="3">No reports yet</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== YOUR EXISTING APP (FULL FUNCTIONALITY) ==================== -->
+  <div class="app-wrapper">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-card">
+        <div class="loading-spinner"></div>
+        <h3 id="loadingMessage">Loading Community Network...</h3>
+        <p>Please wait</p>
+      </div>
+    </div>
+
+    <!-- Registration Card -->
+    <div id="registrationCard" class="form-card">
+      <h1>🇵🇭 Community Network</h1>
+      <div class="subtitle">Register to connect with your community</div>
+      <form id="registerForm">
+        <!-- ... your full registration form ... -->
+        <div class="form-group">
+          <label>Full Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" id="fullName" placeholder="e.g., Juan Dela Cruz" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="juandelacruz@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="password-field">
+            <i class="fas fa-key"></i>
+            <input type="password" id="password" placeholder="Create password" required>
+            <i class="fas fa-eye-slash toggle-eye" id="togglePassword"></i>
+          </div>
+          <div class="strength-meter">
+            <div class="strength-segment segment-1"></div>
+            <div class="strength-segment segment-2"></div>
+            <div class="strength-segment segment-3"></div>
+            <div class="strength-segment segment-4"></div>
+          </div>
+          <div class="strength-text" id="strengthText">Enter password</div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <div class="password-field">
+            <i class="fas fa-check-circle"></i>
+            <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+            <i class="fas fa-eye-slash toggle-eye" id="toggleConfirm"></i>
+          </div>
+          <small id="matchMessage"></small>
+        </div>
+        <div class="form-group">
+          <label>Sex / Gender</label>
+          <div class="radio-group">
+            <label><input type="radio" name="sex" value="male" checked> Male</label>
+            <label><input type="radio" name="sex" value="female"> Female</label>
+            <label><input type="radio" name="sex" value="other"> Other</label>
+            <label><input type="radio" name="sex" value="prefer-not"> Prefer not</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Birthdate</label>
+          <div class="input-wrapper">
+            <i class="fas fa-calendar"></i>
+            <input type="date" id="birthdate" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Philippine Address</label>
+          <div class="address-container">
+            <select id="region" class="address-select" required>
+              <option value="">Select Region</option>
+              <option value="NCR">National Capital Region (NCR)</option>
+              <option value="CAR">Cordillera Administrative Region (CAR)</option>
+              <option value="I">Region I (Ilocos Region)</option>
+              <option value="II">Region II (Cagayan Valley)</option>
+              <option value="III">Region III (Central Luzon)</option>
+              <option value="IV-A">Region IV-A (CALABARZON)</option>
+              <option value="V">Region V (Bicol Region)</option>
+              <option value="VI">Region VI (Western Visayas)</option>
+              <option value="VII">Region VII (Central Visayas)</option>
+              <option value="VIII">Region VIII (Eastern Visayas)</option>
+              <option value="IX">Region IX (Zamboanga Peninsula)</option>
+              <option value="X">Region X (Northern Mindanao)</option>
+              <option value="XI">Region XI (Davao Region)</option>
+              <option value="XII">Region XII (SOCCSKSARGEN)</option>
+              <option value="XIII">Region XIII (Caraga)</option>
+              <option value="BARMM">Bangsamoro Autonomous Region (BARMM)</option>
+            </select>
+            <select id="province" class="address-select" required disabled>
+              <option value="">Select Province</option>
+            </select>
+            <select id="city" class="address-select" required disabled>
+              <option value="">Select City/Municipality</option>
+            </select>
+            <select id="barangay" class="address-select" required disabled>
+              <option value="">Select Barangay</option>
+            </select>
+            <div class="address-row">
+              <input type="text" id="street" class="street-input" placeholder="Street, Building, Unit" required>
+              <input type="text" id="zip" class="zip-input" placeholder="ZIP" maxlength="4" required>
+            </div>
+            <div class="location-badge" id="locationSummary">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Complete address will appear here</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Join as:</label>
+          <select id="userRole" required>
+            <option value="member">Community Member</option>
+            <option value="node-host">Node Host</option>
+            <option value="volunteer">Volunteer</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="privacy-card">
+          <div class="checkbox-item">
+            <input type="checkbox" id="privacyCheck" required>
+            <label for="privacyCheck">
+              I have read and agree to the 
+              <a href="#" id="privacyPolicyLink" class="privacy-link">Privacy Policy</a> 
+              and 
+              <a href="#" id="termsLink" class="privacy-link">Terms of Service</a>
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" id="registerBtn">Create Account</button>
+        <div class="login-link">
+          Already have an account? <a href="#" id="showLoginBtn">Sign in</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Login Card -->
+    <div id="loginCard" class="form-card" style="display: none;">
+      <h1>Welcome Back</h1>
+      <div class="subtitle">Sign in to your account</div>
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="Enter your email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-field">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Enter your password">
+          <i class="fas fa-eye-slash toggle-eye" id="toggleLoginPassword"></i>
+        </div>
+      </div>
+      <button class="btn-submit" id="loginBtn">Sign In</button>
+      <div class="login-link">
+        <a href="#" id="showRegisterBtn">← Create new account</a>
+      </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainAppCard" style="display: none;">
+      <div class="app-grid">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+              <div id="profileImageContainer" style="width: 60px; height: 60px;">
+                <img id="currentUserProfileImg" class="profile-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none;">
+                <div id="currentUserAvatar" class="profile-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #3b82f6, #8b5cf6); border-radius: 50%; color: white; font-weight: bold; font-size: 1.5rem;">JD</div>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; font-size: 1.2rem;" id="currentUserName"></div>
+                <div style="font-size: 0.8rem; color: #64748b;" id="currentUserEmail"></div>
+                <span id="currentUserRole" style="background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; display: none;">ADMIN</span>
+              </div>
+            </div>
+            
+            <!-- Edit Profile Button -->
+            <button id="editProfileBtn" class="btn-small" style="background: #8b5cf6; margin-top: 10px; width: 100%;">
+              <i class="fas fa-edit"></i> Edit Profile
+            </button>
+            
+            <!-- Profile Picture Upload -->
+            <div class="image-upload-btn" id="uploadProfileBtn" style="margin: 10px 0; padding: 8px; cursor: pointer;">
+              <i class="fas fa-camera"></i> Change Profile Picture
+            </div>
+            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+            
+            <!-- Search Bar -->
+            <div class="search-container" style="margin-bottom: 15px;">
+              <div class="search-wrapper" style="position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                <input type="text" id="searchInput" placeholder="Search posts or members..." style="width: 100%; padding: 12px 15px 12px 45px; border: 1.5px solid #e2e8f0; border-radius: 40px; font-size: 0.95rem; background: white;">
+              </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div style="display: flex; justify-content: space-around; margin: 15px 0; padding: 10px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.1rem;" id="quickPosts">0</div>
+                <div style="font-size: 0.7rem; color: #64748b;">Posts</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.1rem;" id="quickMembers">0</div>
+                <div style="font-size: 0.7rem; color: #64748b;">Members</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.1rem;" id="quickUnread">0</div>
+                <div style="font-size: 0.7rem; color: #64748b;">Messages</div>
+              </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="tab-btn active" id="tabPosts" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-newspaper"></i> News Feed
+              </button>
+              <button class="tab-btn" id="tabMembers" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-users"></i> Members
+              </button>
+              <button class="tab-btn" id="tabMessages" data-count="0" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-comment-dots"></i> Messages
+              </button>
+              <button class="tab-btn" id="tabCreate" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-pen"></i> Create Post
+              </button>
+              <button class="tab-btn" id="tabPending" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px; display: none;">
+                <i class="fas fa-clock"></i> Pending Approval
+              </button>
+              <button class="tab-btn" id="tabEvents" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-calendar-alt"></i> Events
+              </button>
+            </div>
+            
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+          <!-- Posts Tab -->
+          <div id="postsTab" class="form-card">
+            <h2>📝 News Feed</h2>
+            <div class="stats-bar">
+              <div class="stat-item"><span class="stat-number" id="totalPosts">0</span><div>Total</div></div>
+              <div class="stat-item"><span class="stat-number" id="approvedPosts">0</span><div>Approved</div></div>
+              <div class="stat-item"><span class="stat-number" id="pendingPosts">0</span><div>Pending</div></div>
+            </div>
+            <div id="postsList" class="posts-grid"></div>
+          </div>
+
+          <!-- Members Tab -->
+          <div id="membersTab" class="form-card" style="display: none;">
+            <h2>👥 Community Members</h2>
+            <div class="stats-bar">
+              <div class="stat-item"><span class="stat-number" id="totalMembers">0</span><div>Total</div></div>
+              <div class="stat-item"><span class="stat-number" id="onlineMembers">0</span><div>Online</div></div>
+              <div class="stat-item"><span class="stat-number" id="hostMembers">0</span><div>Hosts</div></div>
+            </div>
+            <div id="membersList" class="members-grid"></div>
+          </div>
+
+          <!-- Messages Tab -->
+          <div id="messagesTab" class="form-card" style="display: none;">
+            <h2>💬 Conversations</h2>
+            <div id="conversationsList" class="members-grid"></div>
+          </div>
+
+          <!-- Chat View -->
+          <div id="chatView" class="form-card" style="display: none; padding: 0;">
+            <div class="chat-container">
+              <div class="chat-header">
+                <button class="back-btn" id="closeChatBtn">←</button>
+                <div class="member-avatar" id="chatAvatar" style="display: flex;">JD</div>
+                <div>
+                  <div id="chatWithName" style="font-weight: 700;"></div>
+                  <div id="chatWithStatus" style="font-size: 0.7rem; color: #64748b;">Offline</div>
+                </div>
+              </div>
+              <div class="chat-messages" id="chatMessages"></div>
+              <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Create Tab -->
+          <div id="createTab" class="form-card" style="display: none;">
+            <h2>➕ Create Post</h2>
+            <div class="form-group">
+              <textarea id="postContent" placeholder="What's on your mind?" rows="3"></textarea>
+            </div>
+            <div class="image-upload-btn" id="uploadPostImageBtn" style="cursor: pointer;">
+              <i class="fas fa-image"></i> Add Image to Post
+            </div>
+            <input type="file" id="postImageInput" accept="image/*" style="display: none;">
+            <div id="postImagePreview" style="display: none; margin-top: 10px;">
+              <img id="postPreviewImg" class="image-preview">
+              <button type="button" id="removePostImageBtn" class="btn-small" style="background: #ef4444; margin-top: 5px;">Remove Image</button>
+            </div>
+            <button class="btn-submit" id="createPostBtn" style="margin-top: 15px;">Post</button>
+          </div>
+
+          <!-- Pending Tab -->
+          <div id="pendingTab" class="form-card" style="display: none;">
+            <h2>⏳ Pending Approval</h2>
+            <div id="pendingList" class="posts-grid"></div>
+          </div>
+
+          <!-- Profile Page Tab -->
+          <div id="profilePageTab" class="form-card" style="display: none;">
+            <div id="profilePageContent"></div>
+            <button id="closeProfilePageBtn" class="btn-small" style="background: #64748b; margin-top: 15px;">← Back to Members</button>
+          </div>
+
+          <!-- Events Tab -->
+          <div id="eventsTab" class="form-card" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2>📅 Community Events</h2>
+              <button id="createEventBtn" class="btn-small" style="background: #10b981;"><i class="fas fa-plus"></i> Create Event</button>
+            </div>
+            <div id="eventsList" class="events-grid"></div>
+          </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar" style="display: none;">
+          <div class="sidebar-card">
+            <h3>📊 Community Stats</h3>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span>Total Members:</span>
+                <span style="font-weight: 700;" id="statTotalMembers">0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Online Now:</span>
+                <span style="font-weight: 700; color: #22c55e;" id="statOnlineMembers">0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Node Hosts:</span>
+                <span style="font-weight: 700; color: #8b5cf6;" id="statHostMembers">0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Total Posts:</span>
+                <span style="font-weight: 700;" id="statTotalPosts">0</span>
+              </div>
+            </div>
+            <h3 style="margin: 20px 0 15px;">🟢 Online Members</h3>
+            <div id="onlineMembersList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-message" id="toast"></div>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+  <div id="privacyModal" class="policy-modal">
+    <div class="policy-modal-content">
+      <span class="close-modal" id="closePrivacyModal">&times;</span>
+      <h2>📜 Privacy Policy</h2>
+      <div class="policy-text">
+        <h3>1. Information We Collect</h3>
+        <p>We collect your name, email, birthdate, and address to create your community profile. Profile pictures and bio are optional.</p>
+        <h3>2. How We Use Your Data</h3>
+        <p>Your information is used to display your profile, show your posts, and connect you with other community members.</p>
+        <h3>3. Data Storage</h3>
+        <p>All data is stored locally on your device using localStorage. No data is sent to external servers.</p>
+        <h3>4. Your Rights</h3>
+        <p>You can edit or delete your profile and posts at any time.</p>
+        <h3>5. Data Security</h3>
+        <p>Your password is encrypted. No one can access your account without your password.</p>
+      </div>
+      <button class="close-policy-btn" id="agreePrivacyBtn">I Understand & Agree</button>
+    </div>
+  </div>
+
+  <div id="termsModal" class="policy-modal">
+    <div class="policy-modal-content">
+      <span class="close-modal" id="closeTermsModal">&times;</span>
+      <h2>📜 Terms of Service</h2>
+      <div class="policy-text">
+        <h3>1. Acceptance of Terms</h3>
+        <p>By using this Community Network, you agree to these terms.</p>
+        <h3>2. Community Guidelines</h3>
+        <p>Be respectful. No harassment, hate speech, bullying, or spam.</p>
+        <h3>3. Content Ownership</h3>
+        <p>You own your content. You grant the community permission to display your posts.</p>
+        <h3>4. Admin Rights</h3>
+        <p>Admins may remove content that violates guidelines.</p>
+        <h3>5. Account Responsibility</h3>
+        <p>You are responsible for your account security.</p>
+      </div>
+      <button class="close-terms-btn" id="agreeTermsBtn">I Understand & Agree</button>
+    </div>
+  </div>
+
+  <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 10001;">
+    <div class="form-card" style="max-width: 400px; margin: 0;">
+      <h3>✏️ Edit Profile</h3>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="editFullName">
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea id="editBio" rows="3" placeholder="Tell something about yourself..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="editLocation" placeholder="e.g., Baler, Aurora">
+      </div>
+      <div class="form-group">
+        <label>Website</label>
+        <input type="text" id="editWebsite" placeholder="https://...">
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="saveProfileBtn" class="btn-submit" style="margin: 0;">Save Changes</button>
+        <button id="closeModalBtn" class="btn-small" style="background: #64748b;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="createEventModal" class="policy-modal" style="display: none;">
+    <div class="policy-modal-content" style="max-width: 500px;">
+      <span class="close-modal" id="closeEventModal">&times;</span>
+      <h2>📝 Create New Event</h2>
+      <div class="form-group">
+        <label>Event Title</label>
+        <input type="text" id="eventTitle" placeholder="e.g., Community Cleanup">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="eventDesc" rows="3" placeholder="What's this event about?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Date & Time</label>
+        <input type="datetime-local" id="eventDatetime">
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="eventLocation" placeholder="e.g., Barangay Hall">
+      </div>
+      <button id="saveEventBtn" class="btn-submit" style="margin-top: 10px;">Create Event</button>
+    </div>
+  </div>
 </main>
 
-<div class="toast-message" id="toast"></div>
+<!-- ==================== MODERN FOOTER ==================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>CircleConnect</h4>
+        <a href="#">About us</a>
+        <a href="#">Our mission</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="#">Guidelines</a>
+        <a href="#">Code of conduct</a>
+        <a href="#">Support center</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Blog</a>
+        <a href="#">Podcast</a>
+        <a href="#">Events calendar</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#" id="footerPrivacyLink">Privacy</a>
+        <a href="#" id="footerTermsLink">Terms of service</a>
+      </div>
+    </div>
+    <div class="copyright">
+      <i class="far fa-copyright"></i> 2025 CircleConnect – Building stronger communities together.
+    </div>
+  </div>
+</footer>
 
 <script>
-    // ----- Data Layer -----
-    let users = JSON.parse(localStorage.getItem('community_users')) || [];
-    let posts = JSON.parse(localStorage.getItem('community_posts')) || [];
-    let events = JSON.parse(localStorage.getItem('community_events')) || [];
-    let currentUser = null;
-
-    function saveData() {
-        localStorage.setItem('community_users', JSON.stringify(users));
-        localStorage.setItem('community_posts', JSON.stringify(posts));
-        localStorage.setItem('community_events', JSON.stringify(events));
-    }
-
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.textContent = msg;
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 3000);
-    }
-
-    // ----- Auth -----
-    document.getElementById('registerForm')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('fullName').value;
-        const email = document.getElementById('email').value;
-        const pwd = document.getElementById('password').value;
-        const confirm = document.getElementById('confirmPassword').value;
-        const role = document.getElementById('userRole').value;
-        if (pwd !== confirm) return showToast('Passwords do not match');
-        if (users.find(u => u.email === email)) return showToast('Email already exists');
-        const newUser = { id: Date.now(), name, email, password: pwd, role, bio: '', avatar: '', createdAt: new Date() };
-        users.push(newUser);
-        saveData();
-        showToast('Registration successful! Please sign in.');
-        document.getElementById('registrationCard').style.display = 'none';
-        document.getElementById('loginCard').style.display = 'block';
+  // ===== PWA & MODAL HANDLERS (unchanged) =====
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+        .catch(err => console.log('❌ Service Worker failed:', err));
     });
+  }
 
-    document.getElementById('showLoginBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('registrationCard').style.display = 'none';
-        document.getElementById('loginCard').style.display = 'block';
+  // ===== PRIVACY & TERMS MODAL HANDLERS (unchanged) =====
+  const privacyModal = document.getElementById('privacyModal');
+  const termsModal = document.getElementById('termsModal');
+  const privacyLink = document.getElementById('privacyPolicyLink');
+  const termsLink = document.getElementById('termsLink');
+  const closePrivacy = document.getElementById('closePrivacyModal');
+  const closeTerms = document.getElementById('closeTermsModal');
+  const agreePrivacyBtn = document.getElementById('agreePrivacyBtn');
+  const agreeTermsBtn = document.getElementById('agreeTermsBtn');
+  const privacyCheckbox = document.getElementById('privacyCheck');
+
+  if (privacyLink) {
+    privacyLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      privacyModal.style.display = 'flex';
     });
-    document.getElementById('showRegisterBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('loginCard').style.display = 'none';
-        document.getElementById('registrationCard').style.display = 'block';
+  }
+  if (termsLink) {
+    termsLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      termsModal.style.display = 'flex';
     });
-
-    document.getElementById('loginForm')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const pwd = document.getElementById('loginPassword').value;
-        const user = users.find(u => u.email === email && u.password === pwd);
-        if (!user) return showToast('Invalid credentials');
-        currentUser = user;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        document.getElementById('loginCard').style.display = 'none';
-        document.getElementById('registrationCard').style.display = 'none';
-        document.getElementById('mainAppCard').style.display = 'block';
-        renderApp();
+  }
+  if (closePrivacy) {
+    closePrivacy.addEventListener('click', () => {
+      privacyModal.style.display = 'none';
     });
-
-    function renderApp() {
-        if (!currentUser) return;
-        document.getElementById('userProfileSummary').innerHTML = `<strong>${currentUser.name}</strong><br>${currentUser.email}<br><span style="background:var(--primary); color:white; padding:2px 8px; border-radius:20px;">${currentUser.role}</span>`;
-        renderPosts();
-        renderMembers();
-        renderEvents();
-        updateStats();
-        if (currentUser.role === 'admin') document.getElementById('adminToggleBtn').style.display = 'inline-block';
-        else document.getElementById('adminToggleBtn').style.display = 'none';
-    }
-
-    function renderPosts() {
-        const container = document.getElementById('postsList');
-        if (!container) return;
-        const filtered = posts.filter(p => p.status !== 'pending' || p.authorId === currentUser.id || currentUser.role === 'admin');
-        container.innerHTML = filtered.map(post => `
-            <div class="post-card">
-                <div class="post-author"><div class="avatar">${post.authorName?.charAt(0) || 'U'}</div><div><b>${post.authorName}</b><br><small>${new Date(post.createdAt).toLocaleString()}</small></div></div>
-                <p>${post.content}</p>
-                ${post.image ? `<img src="${post.image}" style="max-width:100%; border-radius:0.5rem; margin:10px 0;">` : ''}
-                <div class="post-stats">
-                    <button class="like-btn" data-id="${post.id}"><i class="far fa-heart"></i> ${post.likes?.length || 0}</button>
-                    <button class="delete-post-btn" data-id="${post.id}" style="color:red; ${currentUser.role !== 'admin' && post.authorId !== currentUser.id ? 'display:none' : ''}">Delete</button>
-                </div>
-            </div>
-        `).join('');
-        document.querySelectorAll('.like-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = parseInt(btn.dataset.id);
-                const post = posts.find(p => p.id === id);
-                if (post) {
-                    if (!post.likes) post.likes = [];
-                    if (post.likes.includes(currentUser.id)) post.likes = post.likes.filter(uid => uid !== currentUser.id);
-                    else post.likes.push(currentUser.id);
-                    saveData();
-                    renderPosts();
-                }
-            });
-        });
-        document.querySelectorAll('.delete-post-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (confirm('Delete post?')) {
-                    posts = posts.filter(p => p.id !== parseInt(btn.dataset.id));
-                    saveData();
-                    renderPosts();
-                }
-            });
-        });
-    }
-
-    function renderMembers() {
-        const container = document.getElementById('membersList');
-        if (!container) return;
-        container.innerHTML = users.map(u => `
-            <div class="post-card"><b>${u.name}</b> (${u.role})<br>${u.email}</div>
-        `).join('');
-    }
-
-    function renderEvents() {
-        const container = document.getElementById('eventsList');
-        if (!container) return;
-        container.innerHTML = events.map(e => `<div class="post-card"><b>${e.title}</b><br>${e.date}<br>${e.location}</div>`).join('');
-    }
-
-    function updateStats() {
-        const statsDiv = document.getElementById('statsWidget');
-        if (statsDiv) statsDiv.innerHTML = `<div>Members: ${users.length}</div><div>Posts: ${posts.length}</div><div>Events: ${events.length}</div>`;
-    }
-
-    document.getElementById('createPostBtn')?.addEventListener('click', () => {
-        const content = document.getElementById('postContent').value;
-        if (!content) return showToast('Write something');
-        const newPost = {
-            id: Date.now(),
-            content,
-            authorId: currentUser.id,
-            authorName: currentUser.name,
-            createdAt: new Date(),
-            likes: [],
-            status: currentUser.role === 'admin' ? 'approved' : 'approved',
-            image: null
-        };
-        posts.unshift(newPost);
-        saveData();
-        document.getElementById('postContent').value = '';
-        renderPosts();
-        showToast('Post created!');
+  }
+  if (closeTerms) {
+    closeTerms.addEventListener('click', () => {
+      termsModal.style.display = 'none';
     });
+  }
+  if (agreePrivacyBtn) {
+    agreePrivacyBtn.addEventListener('click', () => {
+      privacyModal.style.display = 'none';
+      if (privacyCheckbox) privacyCheckbox.checked = true;
+      if (typeof showToast === 'function') showToast('✓ You have agreed to the Privacy Policy');
+    });
+  }
+  if (agreeTermsBtn) {
+    agreeTermsBtn.addEventListener('click', () => {
+      termsModal.style.display = 'none';
+      if (privacyCheckbox) privacyCheckbox.checked = true;
+      if (typeof showToast === 'function') showToast('✓ You have agreed to the Terms of Service');
+    });
+  }
 
-    document.getElementById('createEventBtn')?.addEventListener('click', () => {
-        const title = prompt('Event title');
-        const date = prompt('Date & time');
-        const location = prompt('Location');
-        if (title && date) {
-            events.push({ id: Date.now(), title, date, location, createdBy: currentUser.id });
-            saveData();
-            renderEvents();
+  window.addEventListener('click', (e) => {
+    if (e.target === privacyModal) privacyModal.style.display = 'none';
+    if (e.target === termsModal) termsModal.style.display = 'none';
+  });
+
+  // ===== MODERN NAVBAR & HERO INTERACTIONS =====
+  const menuToggle = document.getElementById('mobileMenuBtn');
+  const navLinksDiv = document.getElementById('navLinks');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      navLinksDiv.classList.toggle('show');
+    });
+  }
+
+  function updateHeroStats(membersCount, postsCount) {
+    const statMembers = document.getElementById('statMembersHero');
+    const statPosts = document.getElementById('statPostsHero');
+    if (statMembers) statMembers.textContent = membersCount;
+    if (statPosts) statPosts.textContent = postsCount;
+  }
+
+  // ===== ADD ADMIN DASHBOARD FUNCTIONALITY =====
+  // This assumes your external script.js handles users, posts, currentUser, etc.
+  // We will integrate admin features that hook into those global variables.
+  
+  // Wait for the external script to load (or we provide fallback)
+  setTimeout(() => {
+    const adminToggleBtn = document.getElementById('adminToggleBtn');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const closeAdminBtn = document.getElementById('closeAdminBtn');
+    
+    // Function to refresh admin panel data (uses global users, posts, currentUser)
+    function refreshAdminPanel() {
+      if (typeof window.users !== 'undefined' && window.currentUser && window.currentUser.role === 'admin') {
+        const statsDiv = document.getElementById('adminStats');
+        if (statsDiv) {
+          statsDiv.innerHTML = `
+            <div class="stat-card">Total Users: ${window.users.length}</div>
+            <div class="stat-card">Total Posts: ${window.posts.length}</div>
+            <div class="stat-card">Admins: ${window.users.filter(u => u.role === 'admin').length}</div>
+          `;
         }
-    });
-
-    // Tab switching
-    const tabs = { posts: document.getElementById('postsTab'), members: document.getElementById('membersTab'), create: document.getElementById('createTab'), events: document.getElementById('eventsTab') };
-    function showTab(tab) {
-        Object.values(tabs).forEach(t => t.style.display = 'none');
-        tabs[tab].style.display = 'block';
-        if (tab === 'posts') renderPosts();
-        if (tab === 'members') renderMembers();
-        if (tab === 'events') renderEvents();
-    }
-    document.getElementById('tabPosts')?.addEventListener('click', () => showTab('posts'));
-    document.getElementById('tabMembers')?.addEventListener('click', () => showTab('members'));
-    document.getElementById('tabCreate')?.addEventListener('click', () => showTab('create'));
-    document.getElementById('tabEvents')?.addEventListener('click', () => showTab('events'));
-
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
-        currentUser = null;
-        localStorage.removeItem('currentUser');
-        document.getElementById('mainAppCard').style.display = 'none';
-        document.getElementById('loginCard').style.display = 'block';
-    });
-
-    // Admin Dashboard
-    const adminDash = document.getElementById('adminDashboard');
-    document.getElementById('adminToggleBtn')?.addEventListener('click', () => {
-        if (currentUser?.role !== 'admin') return showToast('Admin access only');
-        adminDash.classList.toggle('visible');
-        if (adminDash.classList.contains('visible')) {
-            document.getElementById('adminStats').innerHTML = `<div class="stat-card">Users: ${users.length}</div><div class="stat-card">Posts: ${posts.length}</div><div class="stat-card">Reports: 0</div>`;
-            const usersTable = document.getElementById('usersTable').querySelector('tbody');
-            usersTable.innerHTML = users.map(u => `<tr><td>${u.name}</td><td>${u.role}</td><td><button class="action-btn danger" data-uid="${u.id}">Delete User</button></td></tr>`).join('');
-            document.querySelectorAll('[data-uid]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (confirm('Delete user?')) {
-                        users = users.filter(u => u.id !== parseInt(btn.dataset.uid));
-                        posts = posts.filter(p => p.authorId !== parseInt(btn.dataset.uid));
-                        saveData();
-                        showToast('User deleted');
-                        location.reload();
-                    }
-                });
+        const tbody = document.querySelector('#usersTable tbody');
+        if (tbody) {
+          tbody.innerHTML = window.users.map(user => `
+            <tr>
+              <td>${user.name}</td>
+              <td>${user.email}</td>
+              <td>${user.role}</td>
+              <td><button class="action-btn danger" data-user-id="${user.id}">Delete User</button></td>
+            </tr>
+          `).join('');
+          // Attach delete handlers
+          document.querySelectorAll('[data-user-id]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const userId = parseInt(btn.dataset.userId);
+              if (confirm('Delete this user and all their posts?')) {
+                window.users = window.users.filter(u => u.id !== userId);
+                window.posts = window.posts.filter(p => p.authorId !== userId);
+                localStorage.setItem('community_users', JSON.stringify(window.users));
+                localStorage.setItem('community_posts', JSON.stringify(window.posts));
+                if (window.currentUser && window.currentUser.id === userId) {
+                  window.currentUser = null;
+                  localStorage.removeItem('currentUser');
+                  location.reload();
+                } else {
+                  refreshAdminPanel();
+                  if (typeof window.renderPosts === 'function') window.renderPosts();
+                  if (typeof window.updateStats === 'function') window.updateStats();
+                }
+              }
             });
+          });
         }
-    });
-    document.getElementById('closeAdminBtn')?.addEventListener('click', () => adminDash.classList.remove('visible'));
-
-    // Dark Mode
-    document.getElementById('darkModeToggle')?.addEventListener('click', () => document.body.classList.toggle('dark'));
-
-    // Mobile menu
-    document.getElementById('mobileMenuBtn')?.addEventListener('click', () => document.getElementById('navLinks').classList.toggle('show'));
-
-    // Initial load
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-        currentUser = JSON.parse(storedUser);
-        const found = users.find(u => u.id === currentUser.id);
-        if (found) {
-            currentUser = found;
-            document.getElementById('mainAppCard').style.display = 'block';
-            document.getElementById('registrationCard').style.display = 'none';
-            document.getElementById('loginCard').style.display = 'none';
-            renderApp();
+      }
+    }
+    
+    if (adminToggleBtn && adminDashboard) {
+      adminToggleBtn.addEventListener('click', () => {
+        if (window.currentUser && window.currentUser.role === 'admin') {
+          adminDashboard.classList.toggle('visible');
+          if (adminDashboard.classList.contains('visible')) {
+            refreshAdminPanel();
+          }
         } else {
-            localStorage.removeItem('currentUser');
-            document.getElementById('registrationCard').style.display = 'block';
+          alert('Admin access only');
         }
-    } else {
-        document.getElementById('registrationCard').style.display = 'block';
+      });
     }
+    if (closeAdminBtn) {
+      closeAdminBtn.addEventListener('click', () => {
+        adminDashboard.classList.remove('visible');
+      });
+    }
+    
+    // Show/hide admin button based on user role
+    function updateAdminButtonVisibility() {
+      if (adminToggleBtn && window.currentUser) {
+        adminToggleBtn.style.display = window.currentUser.role === 'admin' ? 'inline-block' : 'none';
+      }
+    }
+    
+    // Hook into existing script's renderApp or similar if possible
+    if (typeof window.renderApp === 'function') {
+      const originalRenderApp = window.renderApp;
+      window.renderApp = function() {
+        originalRenderApp();
+        updateAdminButtonVisibility();
+      };
+    }
+    // Also listen for login/registration events
+    window.addEventListener('userLoggedIn', updateAdminButtonVisibility);
+    
+    // Expose refresh function globally
+    window.refreshAdminPanel = refreshAdminPanel;
+  }, 500);
 </script>
+
+<!-- Your existing external script.js (which contains all the app logic) -->
+<script defer src="script.js"></script>
 </body>
 </html>
