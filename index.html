@@ -1,28 +1,632 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>Community Network • CircleConnect</title>
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4f46e5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CommNet">
-    
-    <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- Main Styles -->
-    <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CircleConnect | Community Network + Admin Dashboard</title>
+  <!-- Google Fonts + Font Awesome 6 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    /* CSS Variables – clean & professional */
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #eef2ff;
+      --secondary: #10b981;
+      --gray-50: #f9fafb;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+      --radius-lg: 1rem;
+      --radius-md: 0.75rem;
+      --radius-sm: 0.5rem;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Navigation */
+    .navbar {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(0px);
+      background: rgba(255,255,255,0.98);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, #818cf8 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .logo i {
+      background: none;
+      color: var(--primary);
+      margin-right: 6px;
+      font-size: 1.6rem;
+      background-clip: unset;
+      -webkit-background-clip: unset;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--gray-700);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+    }
+
+    .btn-outline-light {
+      border: 1px solid var(--gray-300);
+      background: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-outline-light:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--gray-700);
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 4rem 0 3rem;
+      background: linear-gradient(145deg, #ffffff 0%, #f9f5ff 100%);
+    }
+
+    .hero-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      justify-content: space-between;
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    .hero-content h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(to right, #1e293b, #4f46e5);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.125rem;
+      color: var(--gray-600);
+      max-width: 550px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--gray-800);
+    }
+
+    .stat-label {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
+
+    .hero-illustration {
+      flex: 1;
+      background: var(--primary-light);
+      border-radius: 2rem;
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .hero-illustration i {
+      font-size: 8rem;
+      opacity: 0.8;
+    }
+
+    /* Stats row (additional) */
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.8rem 1rem;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+    }
+
+    /* Main 2-column layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0 3rem;
+    }
+
+    /* Feed styling */
+    .feed-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .feed-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .create-post-btn {
+      background: var(--primary-light);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      color: var(--primary);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .post-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .post-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .post-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      background: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .author-info h4 {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .author-info p {
+      font-size: 0.75rem;
+      color: var(--gray-600);
+    }
+
+    .post-content p {
+      margin: 0.75rem 0;
+      color: var(--gray-700);
+    }
+
+    .post-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .post-stats button {
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+
+    .post-stats button i {
+      font-size: 1rem;
+    }
+
+    .like-btn.liked {
+      color: #ef4444;
+    }
+
+    .like-btn:hover {
+      color: #ef4444;
+    }
+
+    .comment-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Sidebar Widgets */
+    .sidebar-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .event-item, .group-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px dashed var(--gray-200);
+    }
+
+    .event-info strong, .group-info strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .event-info span, .group-info span {
+      font-size: 0.75rem;
+      color: var(--gray-600);
+    }
+
+    .btn-sm {
+      padding: 0.3rem 0.8rem;
+      font-size: 0.7rem;
+      border-radius: 2rem;
+      background: transparent;
+      border: 1px solid var(--gray-300);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-sm:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .trending-tag {
+      background: var(--gray-100);
+      padding: 0.4rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      margin: 0.3rem 0.3rem;
+      display: inline-block;
+      color: var(--gray-700);
+    }
+
+    /* Footer */
+    .footer {
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      padding: 2.5rem 0 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .footer-col h4 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .footer-col a {
+      display: block;
+      color: var(--gray-600);
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--gray-200);
+      font-size: 0.8rem;
+      color: var(--gray-600);
+    }
+
+    /* ========== ADMIN DASHBOARD STYLES ========== */
+    .admin-dashboard {
+      display: none;
+      margin: 2rem 0;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+    }
+    .admin-dashboard.visible {
+      display: block;
+    }
+    .admin-header {
+      background: var(--gray-800);
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .admin-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    .close-admin {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      border-radius: 2rem;
+      padding: 0.3rem 1rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem;
+      background: var(--gray-50);
+    }
+    .stat-card {
+      background: white;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--primary);
+    }
+    .stat-card h3 {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin-bottom: 0.5rem;
+    }
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gray-800);
+    }
+    .admin-table-section {
+      padding: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+    }
+    .admin-table-section h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .admin-table th, .admin-table td {
+      text-align: left;
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .admin-table th {
+      background: var(--gray-100);
+      font-weight: 600;
+    }
+    .badge {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .action-btn.danger {
+      color: #dc2626;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        background: white;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        border-bottom: 1px solid var(--gray-200);
+        z-index: 40;
+      }
+      .nav-links.show {
+        display: flex;
+      }
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      .hero-stats {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .stats-row {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      .hero-illustration i {
+        font-size: 5rem;
+      }
+      .container {
+        padding: 0 1rem;
+      }
+      .admin-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .nav-links {
+        display: flex !important;
+      }
+    }
+
+    button {
+      background: none;
+      font-family: inherit;
+    }
+    .like-counter {
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
 
-<!-- ==================== MODERN NAVBAR ==================== -->
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">
@@ -31,36 +635,33 @@
     <button class="menu-toggle" id="mobileMenuBtn" aria-label="Menu">
       <i class="fas fa-bars"></i>
     </button>
-    <!-- NEW: Dark Mode Toggle Button -->
-    <button class="dark-mode-toggle-nav" id="darkModeToggleNav" aria-label="Dark mode">
-      <i class="fas fa-moon"></i>
-    </button>
     <div class="nav-links" id="navLinks">
-      <a href="#" class="active" id="navHome">Home</a>
-      <a href="#" id="navFeed">Feed</a>
-      <a href="#" id="navGroups">Groups</a>
-      <a href="#" id="navEvents">Events</a>
-      <a href="#" id="navMembers">Members</a>
-      <button class="btn-outline-light" id="navSignInBtn"><i class="far fa-user-circle"></i> Sign in</button>
-      <button class="btn-primary" id="navJoinBtn">Join now</button>
+      <a href="#" class="active">Home</a>
+      <a href="#">Feed</a>
+      <a href="#">Groups</a>
+      <a href="#">Events</a>
+      <a href="#">Members</a>
+      <button class="btn-outline-light" id="adminToggleBtn"><i class="fas fa-lock"></i> Admin Panel</button>
+      <button class="btn-outline-light"><i class="far fa-user-circle"></i> Sign in</button>
+      <button class="btn-primary">Join now</button>
     </div>
   </div>
 </nav>
 
 <main>
-  <!-- ==================== HERO SECTION ==================== -->
-  <section class="hero">
+  <!-- Hero Section -->
+  <section class="hero" id="heroSection">
     <div class="container hero-grid">
       <div class="hero-content">
         <h1>Where communities <br> grow together</h1>
         <p>Connect, share, and build meaningful relationships in a vibrant digital space. Join thousands of members making an impact.</p>
-        <div class="hero-stats" id="heroStats">
-          <div class="stat"><span class="stat-number" id="statMembersHero">0</span><span class="stat-label">Active members</span></div>
-          <div class="stat"><span class="stat-number" id="statPostsHero">0</span><span class="stat-label">Community posts</span></div>
-          <div class="stat"><span class="stat-number" id="statGroupsHero">12</span><span class="stat-label">Interest groups</span></div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-number">2,845+</span><span class="stat-label">Active members</span></div>
+          <div class="stat"><span class="stat-number">128</span><span class="stat-label">Interest groups</span></div>
+          <div class="stat"><span class="stat-number">52</span><span class="stat-label">Live events</span></div>
         </div>
         <div style="margin-top: 1.5rem;">
-          <button class="btn-primary hero-cta" id="heroGetStartedBtn"><i class="fas fa-rocket"></i> Get started</button>
+          <button class="btn-primary" style="padding: 0.7rem 2rem;" id="getStartedBtn"><i class="fas fa-rocket"></i> Get started</button>
         </div>
       </div>
       <div class="hero-illustration">
@@ -70,471 +671,179 @@
     </div>
   </section>
 
-  <!-- ==================== QUICK STATS ROW ==================== -->
   <div class="container">
+    <!-- Quick stats row -->
     <div class="stats-row" id="statsRow">
-      <div><i class="fas fa-globe" style="color: var(--primary);"></i> <span id="statCountries">14+</span> Countries</div>
-      <div><i class="fas fa-calendar-week"></i> <span id="statMonthlyEvents">300+</span> Monthly Events</div>
-      <div><i class="fas fa-chalkboard-user"></i> <span id="statExpertHosts">45+</span> Expert Hosts</div>
-      <div><i class="fas fa-handshake"></i> <span id="statSatisfaction">92%</span> Member Satisfaction</div>
-    </div>
-  </div>
-
-  <!-- ==================== YOUR EXISTING APP (FULL FUNCTIONALITY) ==================== -->
-  <div class="app-wrapper">
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-      <div class="loading-card">
-        <div class="loading-spinner"></div>
-        <h3 id="loadingMessage">Loading Community Network...</h3>
-        <p>Please wait</p>
-      </div>
+      <div><i class="fas fa-globe" style="color: var(--primary);"></i> 14+ Countries</div>
+      <div><i class="fas fa-calendar-week"></i> 300+ Monthly Events</div>
+      <div><i class="fas fa-chalkboard-user"></i> 45+ Expert Hosts</div>
+      <div><i class="fas fa-handshake"></i> 92% Member Satisfaction</div>
     </div>
 
-    <!-- Registration Card (from original) -->
-    <div id="registrationCard" class="form-card">
-      <h1>🇵🇭 Community Network</h1>
-      <div class="subtitle">Register to connect with your community</div>
-      <form id="registerForm">
-        <div class="form-group">
-          <label>Full Name</label>
-          <div class="input-wrapper">
-            <i class="fas fa-user"></i>
-            <input type="text" id="fullName" placeholder="e.g., Juan Dela Cruz" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <div class="input-wrapper">
-            <i class="fas fa-envelope"></i>
-            <input type="email" id="email" placeholder="juandelacruz@email.com" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <div class="password-field">
-            <i class="fas fa-key"></i>
-            <input type="password" id="password" placeholder="Create password" required>
-            <i class="fas fa-eye-slash toggle-eye" id="togglePassword"></i>
-          </div>
-          <div class="strength-meter">
-            <div class="strength-segment segment-1"></div>
-            <div class="strength-segment segment-2"></div>
-            <div class="strength-segment segment-3"></div>
-            <div class="strength-segment segment-4"></div>
-          </div>
-          <div class="strength-text" id="strengthText">Enter password</div>
-        </div>
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <div class="password-field">
-            <i class="fas fa-check-circle"></i>
-            <input type="password" id="confirmPassword" placeholder="Confirm password" required>
-            <i class="fas fa-eye-slash toggle-eye" id="toggleConfirm"></i>
-          </div>
-          <small id="matchMessage"></small>
-        </div>
-        <div class="form-group">
-          <label>Sex / Gender</label>
-          <div class="radio-group">
-            <label><input type="radio" name="sex" value="male" checked> Male</label>
-            <label><input type="radio" name="sex" value="female"> Female</label>
-            <label><input type="radio" name="sex" value="other"> Other</label>
-            <label><input type="radio" name="sex" value="prefer-not"> Prefer not</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Birthdate</label>
-          <div class="input-wrapper">
-            <i class="fas fa-calendar"></i>
-            <input type="date" id="birthdate" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Philippine Address</label>
-          <div class="address-container">
-            <select id="region" class="address-select" required>
-              <option value="">Select Region</option>
-              <option value="NCR">National Capital Region (NCR)</option>
-              <option value="CAR">Cordillera Administrative Region (CAR)</option>
-              <option value="I">Region I (Ilocos Region)</option>
-              <option value="II">Region II (Cagayan Valley)</option>
-              <option value="III">Region III (Central Luzon)</option>
-              <option value="IV-A">Region IV-A (CALABARZON)</option>
-              <option value="V">Region V (Bicol Region)</option>
-              <option value="VI">Region VI (Western Visayas)</option>
-              <option value="VII">Region VII (Central Visayas)</option>
-              <option value="VIII">Region VIII (Eastern Visayas)</option>
-              <option value="IX">Region IX (Zamboanga Peninsula)</option>
-              <option value="X">Region X (Northern Mindanao)</option>
-              <option value="XI">Region XI (Davao Region)</option>
-              <option value="XII">Region XII (SOCCSKSARGEN)</option>
-              <option value="XIII">Region XIII (Caraga)</option>
-              <option value="BARMM">Bangsamoro Autonomous Region (BARMM)</option>
-            </select>
-            <select id="province" class="address-select" required disabled>
-              <option value="">Select Province</option>
-            </select>
-            <select id="city" class="address-select" required disabled>
-              <option value="">Select City/Municipality</option>
-            </select>
-            <select id="barangay" class="address-select" required disabled>
-              <option value="">Select Barangay</option>
-            </select>
-            <div class="address-row">
-              <input type="text" id="street" class="street-input" placeholder="Street, Building, Unit" required>
-              <input type="text" id="zip" class="zip-input" placeholder="ZIP" maxlength="4" required>
-            </div>
-            <div class="location-badge" id="locationSummary">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Complete address will appear here</span>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Join as:</label>
-          <select id="userRole" required>
-            <option value="member">Community Member</option>
-            <option value="node-host">Node Host</option>
-            <option value="volunteer">Volunteer</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-        <div class="privacy-card">
-          <div class="checkbox-item">
-            <input type="checkbox" id="privacyCheck" required>
-            <label for="privacyCheck">
-              I have read and agree to the 
-              <a href="#" id="privacyPolicyLink" class="privacy-link">Privacy Policy</a> 
-              and 
-              <a href="#" id="termsLink" class="privacy-link">Terms of Service</a>
-            </label>
-          </div>
-        </div>
-        <button type="submit" class="btn-submit" id="registerBtn">Create Account</button>
-        <div class="login-link">
-          Already have an account? <a href="#" id="showLoginBtn">Sign in</a>
-        </div>
-      </form>
-    </div>
-
-    <!-- Login Card -->
-    <div id="loginCard" class="form-card" style="display: none;">
-      <h1>Welcome Back</h1>
-      <div class="subtitle">Sign in to your account</div>
-      <div class="form-group">
-        <label>Email</label>
-        <div class="input-wrapper">
-          <i class="fas fa-envelope"></i>
-          <input type="email" id="loginEmail" placeholder="Enter your email">
-        </div>
+    <!-- ADMIN DASHBOARD (hidden by default) -->
+    <div id="adminDashboard" class="admin-dashboard">
+      <div class="admin-header">
+        <h2><i class="fas fa-chalkboard-user"></i> Admin Control Center</h2>
+        <button id="closeAdminBtn" class="close-admin"><i class="fas fa-times"></i> Close Dashboard</button>
       </div>
-      <div class="form-group">
-        <label>Password</label>
-        <div class="password-field">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="loginPassword" placeholder="Enter your password">
-          <i class="fas fa-eye-slash toggle-eye" id="toggleLoginPassword"></i>
-        </div>
+      <div class="admin-stats">
+        <div class="stat-card"><h3>Total Members</h3><div class="number">2,845</div></div>
+        <div class="stat-card"><h3>Posts Today</h3><div class="number">128</div></div>
+        <div class="stat-card"><h3>Pending Reports</h3><div class="number">3</div></div>
+        <div class="stat-card"><h3>Active Groups</h3><div class="number">52</div></div>
       </div>
-      <button class="btn-submit" id="loginBtn">Sign In</button>
-      <div class="login-link">
-        <a href="#" id="showRegisterBtn">← Create new account</a>
+      <div class="admin-table-section">
+        <h3><i class="fas fa-flag"></i> Reported Content</h3>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Post / Comment</th><th>Reported by</th><th>Reason</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>"Spam link in gardening post"</td><td>@emilyw</td><td>Spam</td><td><button class="action-btn" data-action="remove">Remove</button><button class="action-btn danger" data-action="ignore">Ignore</button></td></tr>
+            <tr><td>"Offensive language in tech thread"</td><td>@marcus</td><td>Harassment</td><td><button class="action-btn" data-action="remove">Remove</button><button class="action-btn danger" data-action="ignore">Ignore</button></td></tr>
+            <tr><td>"Misinformation about event"</td><td>@lina</td><td>False info</td><td><button class="action-btn" data-action="remove">Remove</button><button class="action-btn danger" data-action="ignore">Ignore</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="admin-table-section">
+        <h3><i class="fas fa-users"></i> Recent Members & Roles</h3>
+        <table class="admin-table">
+          <thead><tr><th>Username</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>Mia Chen</td><td>Member</td><td>Mar 12, 2025</td><td><button class="action-btn promote">Promote</button><button class="action-btn danger suspend">Suspend</button></td></tr>
+            <tr><td>Daniel Okonkwo</td><td>Moderator</td><td>Jan 5, 2025</td><td><button class="action-btn demote">Demote</button><button class="action-btn danger suspend">Suspend</button></td></tr>
+            <tr><td>Elena Rossi</td><td>Member</td><td>Feb 18, 2025</td><td><button class="action-btn promote">Promote</button><button class="action-btn danger suspend">Suspend</button></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Main App -->
-    <div id="mainAppCard" style="display: none;">
-      <div class="app-grid">
-        <!-- Left Sidebar -->
-        <div class="sidebar">
-          <div class="sidebar-card">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
-              <div id="profileImageContainer" style="width: 60px; height: 60px;">
-                <img id="currentUserProfileImg" class="profile-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none;">
-                <div id="currentUserAvatar" class="profile-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #3b82f6, #8b5cf6); border-radius: 50%; color: white; font-weight: bold; font-size: 1.5rem;">JD</div>
-              </div>
-              <div style="flex: 1; min-width: 0;">
-                <div style="font-weight: 700; font-size: 1.2rem;" id="currentUserName"></div>
-                <div style="font-size: 0.8rem; color: #64748b;" id="currentUserEmail"></div>
-                <span id="currentUserRole" style="background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; display: none;">ADMIN</span>
-              </div>
+    <!-- Main layout: Feed + Sidebar (Community View) -->
+    <div class="main-layout" id="communityLayout">
+      <!-- LEFT: COMMUNITY FEED -->
+      <div>
+        <div class="feed-header">
+          <h2><i class="fas fa-rss"></i> Community feed</h2>
+          <button class="create-post-btn" id="createPostBtn"><i class="fas fa-pen-fancy"></i> Create post</button>
+        </div>
+
+        <!-- Post 1 -->
+        <div class="post-card" data-post-id="1">
+          <div class="post-author">
+            <div class="avatar"><i class="fas fa-user-circle"></i></div>
+            <div class="author-info">
+              <h4>Mia Chen <span style="font-weight: normal; font-size:0.75rem;">• Community Leader</span></h4>
+              <p>2 hours ago</p>
             </div>
-            
-            <!-- Edit Profile Button -->
-            <button id="editProfileBtn" class="btn-small" style="background: #8b5cf6; margin-top: 10px; width: 100%;">
-              <i class="fas fa-edit"></i> Edit Profile
-            </button>
-            
-            <!-- Profile Picture Upload -->
-            <div class="image-upload-btn" id="uploadProfileBtn" style="margin: 10px 0; padding: 8px; cursor: pointer;">
-              <i class="fas fa-camera"></i> Change Profile Picture
-            </div>
-            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
-            
-            <!-- Search Bar -->
-            <div class="search-container" style="margin-bottom: 15px;">
-              <div class="search-wrapper" style="position: relative;">
-                <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
-                <input type="text" id="searchInput" placeholder="Search posts or members..." style="width: 100%; padding: 12px 15px 12px 45px; border: 1.5px solid #e2e8f0; border-radius: 40px; font-size: 0.95rem; background: white;">
-              </div>
-            </div>
-            
-            <!-- Quick Stats -->
-            <div style="display: flex; justify-content: space-around; margin: 15px 0; padding: 10px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
-              <div style="text-align: center;">
-                <div style="font-weight: 700; font-size: 1.1rem;" id="quickPosts">0</div>
-                <div style="font-size: 0.7rem; color: #64748b;">Posts</div>
-              </div>
-              <div style="text-align: center;">
-                <div style="font-weight: 700; font-size: 1.1rem;" id="quickMembers">0</div>
-                <div style="font-size: 0.7rem; color: #64748b;">Members</div>
-              </div>
-              <div style="text-align: center;">
-                <div style="font-weight: 700; font-size: 1.1rem;" id="quickUnread">0</div>
-                <div style="font-size: 0.7rem; color: #64748b;">Messages</div>
-              </div>
-            </div>
-            
-            <!-- Navigation -->
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <button class="tab-btn active" id="tabPosts" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
-                <i class="fas fa-newspaper"></i> News Feed
-              </button>
-              <button class="tab-btn" id="tabMembers" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
-                <i class="fas fa-users"></i> Members
-              </button>
-              <button class="tab-btn" id="tabMessages" data-count="0" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
-                <i class="fas fa-comment-dots"></i> Messages
-              </button>
-              <button class="tab-btn" id="tabCreate" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
-                <i class="fas fa-pen"></i> Create Post
-              </button>
-              <button class="tab-btn" id="tabPending" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px; display: none;">
-                <i class="fas fa-clock"></i> Pending Approval
-              </button>
-              <button class="tab-btn" id="tabEvents" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
-                <i class="fas fa-calendar-alt"></i> Events
-              </button>
-            </div>
-            
-            <button class="logout-btn" id="logoutBtn">Logout</button>
+          </div>
+          <div class="post-content">
+            <p>✨ So excited to announce our monthly "Green Neighbors" meetup this Saturday! Let's come together to share gardening tips and community garden updates. Everyone is welcome 🌱🌻</p>
+          </div>
+          <div class="post-stats">
+            <button class="like-btn" data-likes="42"><i class="far fa-heart"></i> <span class="like-counter">42</span></button>
+            <button class="comment-btn"><i class="far fa-comment"></i> 12 comments</button>
+            <button><i class="far fa-share-square"></i> Share</button>
           </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-          <!-- Posts Tab -->
-          <div id="postsTab" class="form-card">
-            <h2>📝 News Feed</h2>
-            <div class="stats-bar">
-              <div class="stat-item"><span class="stat-number" id="totalPosts">0</span><div>Total</div></div>
-              <div class="stat-item"><span class="stat-number" id="approvedPosts">0</span><div>Approved</div></div>
-              <div class="stat-item"><span class="stat-number" id="pendingPosts">0</span><div>Pending</div></div>
-            </div>
-            <div id="postsList" class="posts-grid"></div>
-          </div>
-
-          <!-- Members Tab -->
-          <div id="membersTab" class="form-card" style="display: none;">
-            <h2>👥 Community Members</h2>
-            <div class="stats-bar">
-              <div class="stat-item"><span class="stat-number" id="totalMembers">0</span><div>Total</div></div>
-              <div class="stat-item"><span class="stat-number" id="onlineMembers">0</span><div>Online</div></div>
-              <div class="stat-item"><span class="stat-number" id="hostMembers">0</span><div>Hosts</div></div>
-            </div>
-            <div id="membersList" class="members-grid"></div>
-          </div>
-
-          <!-- Messages Tab -->
-          <div id="messagesTab" class="form-card" style="display: none;">
-            <h2>💬 Conversations</h2>
-            <div id="conversationsList" class="members-grid"></div>
-          </div>
-
-          <!-- Chat View -->
-          <div id="chatView" class="form-card" style="display: none; padding: 0;">
-            <div class="chat-container">
-              <div class="chat-header">
-                <button class="back-btn" id="closeChatBtn">←</button>
-                <div class="member-avatar" id="chatAvatar" style="display: flex;">JD</div>
-                <div>
-                  <div id="chatWithName" style="font-weight: 700;"></div>
-                  <div id="chatWithStatus" style="font-size: 0.7rem; color: #64748b;">Offline</div>
-                </div>
-              </div>
-              <div class="chat-messages" id="chatMessages"></div>
-              <div class="chat-input">
-                <input type="text" id="messageInput" placeholder="Type a message...">
-                <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
-              </div>
+        <!-- Post 2 -->
+        <div class="post-card" data-post-id="2">
+          <div class="post-author">
+            <div class="avatar"><i class="fas fa-laptop-code"></i></div>
+            <div class="author-info">
+              <h4>Daniel Okonkwo <span style="font-weight: normal;">• Tech Hub</span></h4>
+              <p>5 hours ago</p>
             </div>
           </div>
-
-          <!-- Create Tab -->
-          <div id="createTab" class="form-card" style="display: none;">
-            <h2>➕ Create Post</h2>
-            <div class="form-group">
-              <textarea id="postContent" placeholder="What's on your mind?" rows="3"></textarea>
-            </div>
-            <div class="image-upload-btn" id="uploadPostImageBtn" style="cursor: pointer;">
-              <i class="fas fa-image"></i> Add Image to Post
-            </div>
-            <input type="file" id="postImageInput" accept="image/*" style="display: none;">
-            <div id="postImagePreview" style="display: none; margin-top: 10px;">
-              <img id="postPreviewImg" class="image-preview">
-              <button type="button" id="removePostImageBtn" class="btn-small" style="background: #ef4444; margin-top: 5px;">Remove Image</button>
-            </div>
-            <button class="btn-submit" id="createPostBtn" style="margin-top: 15px;">Post</button>
+          <div class="post-content">
+            <p>🚀 Open-source collaboration night was a blast! We built the first prototype of our community toolkit. Check out the repo and contribute: github.com/circleconnect/toolkit</p>
           </div>
-
-          <!-- Pending Tab -->
-          <div id="pendingTab" class="form-card" style="display: none;">
-            <h2>⏳ Pending Approval</h2>
-            <div id="pendingList" class="posts-grid"></div>
-          </div>
-
-          <!-- Profile Page Tab -->
-          <div id="profilePageTab" class="form-card" style="display: none;">
-            <div id="profilePageContent"></div>
-            <button id="closeProfilePageBtn" class="btn-small" style="background: #64748b; margin-top: 15px;">← Back to Members</button>
-          </div>
-
-          <!-- Events Tab -->
-          <div id="eventsTab" class="form-card" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-              <h2>📅 Community Events</h2>
-              <button id="createEventBtn" class="btn-small" style="background: #10b981;"><i class="fas fa-plus"></i> Create Event</button>
-            </div>
-            <div id="eventsList" class="events-grid"></div>
+          <div class="post-stats">
+            <button class="like-btn" data-likes="103"><i class="far fa-heart"></i> <span class="like-counter">103</span></button>
+            <button class="comment-btn"><i class="far fa-comment"></i> 28 comments</button>
+            <button><i class="far fa-share-square"></i> Share</button>
           </div>
         </div>
 
-        <!-- Right Sidebar -->
-        <div class="right-sidebar" style="display: none;">
-          <div class="sidebar-card">
-            <h3>📊 Community Stats</h3>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-              <div style="display: flex; justify-content: space-between;">
-                <span>Total Members:</span>
-                <span style="font-weight: 700;" id="statTotalMembers">0</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Online Now:</span>
-                <span style="font-weight: 700; color: #22c55e;" id="statOnlineMembers">0</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Node Hosts:</span>
-                <span style="font-weight: 700; color: #8b5cf6;" id="statHostMembers">0</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Total Posts:</span>
-                <span style="font-weight: 700;" id="statTotalPosts">0</span>
-              </div>
+        <!-- Post 3 -->
+        <div class="post-card" data-post-id="3">
+          <div class="post-author">
+            <div class="avatar"><i class="fas fa-camera"></i></div>
+            <div class="author-info">
+              <h4>Elena Rossi <span style="font-weight: normal;">• Creative Collective</span></h4>
+              <p>Yesterday</p>
             </div>
-            <h3 style="margin: 20px 0 15px;">🟢 Online Members</h3>
-            <div id="onlineMembersList"></div>
+          </div>
+          <div class="post-content">
+            <p>🎨 Calling all artists! Our virtual gallery night is happening next Friday. Showcase your work and get inspired. Signup link in bio — let's make art together!</p>
+          </div>
+          <div class="post-stats">
+            <button class="like-btn" data-likes="67"><i class="far fa-heart"></i> <span class="like-counter">67</span></button>
+            <button class="comment-btn"><i class="far fa-comment"></i> 19 comments</button>
+            <button><i class="far fa-share-square"></i> Share</button>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="toast-message" id="toast"></div>
-  </div>
+      <!-- RIGHT SIDEBAR: Events & Groups & Trending -->
+      <div>
+        <!-- Upcoming Events Widget -->
+        <div class="sidebar-card">
+          <h3><i class="fas fa-calendar-alt" style="color: var(--primary);"></i> Upcoming events</h3>
+          <div class="event-item">
+            <div class="event-info"><strong>🌿 Community Cleanup</strong><span>May 18, 10:00 AM</span></div>
+            <button class="btn-sm event-join">Join</button>
+          </div>
+          <div class="event-item">
+            <div class="event-info"><strong>💡 Web3 & Future of Networks</strong><span>May 20, 6:00 PM</span></div>
+            <button class="btn-sm event-join">Interested</button>
+          </div>
+          <div class="event-item">
+            <div class="event-info"><strong>🎤 Open Mic Night</strong><span>May 25, 7:30 PM</span></div>
+            <button class="btn-sm event-join">RSVP</button>
+          </div>
+        </div>
 
-  <!-- ==================== MODALS ==================== -->
-  <div id="privacyModal" class="policy-modal">
-    <div class="policy-modal-content">
-      <span class="close-modal" id="closePrivacyModal">&times;</span>
-      <h2>📜 Privacy Policy</h2>
-      <div class="policy-text">
-        <h3>1. Information We Collect</h3>
-        <p>We collect your name, email, birthdate, and address to create your community profile. Profile pictures and bio are optional.</p>
-        <h3>2. How We Use Your Data</h3>
-        <p>Your information is used to display your profile, show your posts, and connect you with other community members.</p>
-        <h3>3. Data Storage</h3>
-        <p>All data is stored locally on your device using localStorage. No data is sent to external servers.</p>
-        <h3>4. Your Rights</h3>
-        <p>You can edit or delete your profile and posts at any time.</p>
-        <h3>5. Data Security</h3>
-        <p>Your password is encrypted. No one can access your account without your password.</p>
-      </div>
-      <button class="close-policy-btn" id="agreePrivacyBtn">I Understand & Agree</button>
-    </div>
-  </div>
+        <!-- Popular Groups Widget -->
+        <div class="sidebar-card">
+          <h3><i class="fas fa-users"></i> Popular groups</h3>
+          <div class="group-item">
+            <div class="group-info"><strong>🌱 Wellness Circle</strong><span>1,230 members</span></div>
+            <button class="btn-sm group-join">Join</button>
+          </div>
+          <div class="group-item">
+            <div class="group-info"><strong>💻 Remote Devs</strong><span>945 members</span></div>
+            <button class="btn-sm group-join">Join</button>
+          </div>
+          <div class="group-item">
+            <div class="group-info"><strong>📸 Photography Lovers</strong><span>672 members</span></div>
+            <button class="btn-sm group-join">Join</button>
+          </div>
+          <div class="group-item">
+            <div class="group-info"><strong>🌍 Climate Action</strong><span>1.1k members</span></div>
+            <button class="btn-sm group-join">Join</button>
+          </div>
+        </div>
 
-  <div id="termsModal" class="policy-modal">
-    <div class="policy-modal-content">
-      <span class="close-modal" id="closeTermsModal">&times;</span>
-      <h2>📜 Terms of Service</h2>
-      <div class="policy-text">
-        <h3>1. Acceptance of Terms</h3>
-        <p>By using this Community Network, you agree to these terms.</p>
-        <h3>2. Community Guidelines</h3>
-        <p>Be respectful. No harassment, hate speech, bullying, or spam.</p>
-        <h3>3. Content Ownership</h3>
-        <p>You own your content. You grant the community permission to display your posts.</p>
-        <h3>4. Admin Rights</h3>
-        <p>Admins may remove content that violates guidelines.</p>
-        <h3>5. Account Responsibility</h3>
-        <p>You are responsible for your account security.</p>
+        <!-- Trending Topics / Tags -->
+        <div class="sidebar-card">
+          <h3><i class="fas fa-fire"></i> Trending topics</h3>
+          <div>
+            <span class="trending-tag">#communityfirst</span>
+            <span class="trending-tag">#sustainability</span>
+            <span class="trending-tag">#networkingtips</span>
+            <span class="trending-tag">#creativegrowth</span>
+            <span class="trending-tag">#wellnesswednesday</span>
+          </div>
+          <div style="margin-top: 1rem;">
+            <p style="font-size:0.75rem; color: var(--gray-600);"><i class="fas fa-chart-line"></i> Active discussions: 142 ongoing</p>
+          </div>
+        </div>
       </div>
-      <button class="close-terms-btn" id="agreeTermsBtn">I Understand & Agree</button>
-    </div>
-  </div>
-
-  <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 10001;">
-    <div class="form-card" style="max-width: 400px; margin: 0;">
-      <h3>✏️ Edit Profile</h3>
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="editFullName">
-      </div>
-      <div class="form-group">
-        <label>Bio</label>
-        <textarea id="editBio" rows="3" placeholder="Tell something about yourself..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" id="editLocation" placeholder="e.g., Baler, Aurora">
-      </div>
-      <div class="form-group">
-        <label>Website</label>
-        <input type="text" id="editWebsite" placeholder="https://...">
-      </div>
-      <div style="display: flex; gap: 10px;">
-        <button id="saveProfileBtn" class="btn-submit" style="margin: 0;">Save Changes</button>
-        <button id="closeModalBtn" class="btn-small" style="background: #64748b;">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="createEventModal" class="policy-modal" style="display: none;">
-    <div class="policy-modal-content" style="max-width: 500px;">
-      <span class="close-modal" id="closeEventModal">&times;</span>
-      <h2>📝 Create New Event</h2>
-      <div class="form-group">
-        <label>Event Title</label>
-        <input type="text" id="eventTitle" placeholder="e.g., Community Cleanup">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea id="eventDesc" rows="3" placeholder="What's this event about?"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Date & Time</label>
-        <input type="datetime-local" id="eventDatetime">
-      </div>
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" id="eventLocation" placeholder="e.g., Barangay Hall">
-      </div>
-      <button id="saveEventBtn" class="btn-submit" style="margin-top: 10px;">Create Event</button>
     </div>
   </div>
 </main>
 
-<!-- ==================== MODERN FOOTER ==================== -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -558,8 +867,8 @@
       </div>
       <div class="footer-col">
         <h4>Legal</h4>
-        <a href="#" id="footerPrivacyLink">Privacy</a>
-        <a href="#" id="footerTermsLink">Terms of service</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms of service</a>
       </div>
     </div>
     <div class="copyright">
@@ -569,93 +878,139 @@
 </footer>
 
 <script>
-  // ===== PWA & MODAL HANDLERS (unchanged) =====
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('✅ Service Worker registered:', reg.scope))
-        .catch(err => console.log('❌ Service Worker failed:', err));
-    });
-  }
-
-  // ===== PRIVACY & TERMS MODAL HANDLERS =====
-  const privacyModal = document.getElementById('privacyModal');
-  const termsModal = document.getElementById('termsModal');
-  const privacyLink = document.getElementById('privacyPolicyLink');
-  const termsLink = document.getElementById('termsLink');
-  const closePrivacy = document.getElementById('closePrivacyModal');
-  const closeTerms = document.getElementById('closeTermsModal');
-  const agreePrivacyBtn = document.getElementById('agreePrivacyBtn');
-  const agreeTermsBtn = document.getElementById('agreeTermsBtn');
-  const privacyCheckbox = document.getElementById('privacyCheck');
-
-  if (privacyLink) {
-    privacyLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      privacyModal.style.display = 'flex';
-    });
-  }
-  if (termsLink) {
-    termsLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      termsModal.style.display = 'flex';
-    });
-  }
-  if (closePrivacy) {
-    closePrivacy.addEventListener('click', () => {
-      privacyModal.style.display = 'none';
-    });
-  }
-  if (closeTerms) {
-    closeTerms.addEventListener('click', () => {
-      termsModal.style.display = 'none';
-    });
-  }
-  if (agreePrivacyBtn) {
-    agreePrivacyBtn.addEventListener('click', () => {
-      privacyModal.style.display = 'none';
-      if (privacyCheckbox) privacyCheckbox.checked = true;
-      if (typeof showToast === 'function') showToast('✓ You have agreed to the Privacy Policy');
-    });
-  }
-  if (agreeTermsBtn) {
-    agreeTermsBtn.addEventListener('click', () => {
-      termsModal.style.display = 'none';
-      if (privacyCheckbox) privacyCheckbox.checked = true;
-      if (typeof showToast === 'function') showToast('✓ You have agreed to the Terms of Service');
-    });
-  }
-
-  window.addEventListener('click', (e) => {
-    if (e.target === privacyModal) privacyModal.style.display = 'none';
-    if (e.target === termsModal) termsModal.style.display = 'none';
-  });
-
-  // ===== MODERN NAVBAR & HERO INTERACTIONS =====
-  const menuToggle = document.getElementById('mobileMenuBtn');
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('mobileMenuBtn');
   const navLinksDiv = document.getElementById('navLinks');
-  if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
+  if (menuBtn) {
+    menuBtn.addEventListener('click', () => {
       navLinksDiv.classList.toggle('show');
     });
   }
 
-  function updateHeroStats(membersCount, postsCount) {
-    const statMembers = document.getElementById('statMembersHero');
-    const statPosts = document.getElementById('statPostsHero');
-    if (statMembers) statMembers.textContent = membersCount;
-    if (statPosts) statPosts.textContent = postsCount;
+  // ADMIN DASHBOARD TOGGLE (preserving all community functions)
+  const adminDashboard = document.getElementById('adminDashboard');
+  const adminToggleBtn = document.getElementById('adminToggleBtn');
+  const closeAdminBtn = document.getElementById('closeAdminBtn');
+  const communityLayout = document.getElementById('communityLayout');
+  const heroSection = document.getElementById('heroSection');
+  const statsRowEl = document.getElementById('statsRow');
+
+  function showAdminDashboard() {
+    adminDashboard.classList.add('visible');
+    if (communityLayout) communityLayout.style.display = 'none';
+    if (heroSection) heroSection.style.display = 'none';
+    if (statsRowEl) statsRowEl.style.display = 'none';
   }
 
-  setInterval(() => {
-    const quickMembers = document.getElementById('quickMembers');
-    const quickPosts = document.getElementById('quickPosts');
-    if (quickMembers && quickPosts) {
-      const members = parseInt(quickMembers.innerText) || 0;
-      const posts = parseInt(quickPosts.innerText) || 0;
-      updateHeroStats(members, posts);
-    }
-  }, 2000);
+  function hideAdminDashboard() {
+    adminDashboard.classList.remove('visible');
+    if (communityLayout) communityLayout.style.display = 'grid';
+    if (heroSection) heroSection.style.display = '';
+    if (statsRowEl) statsRowEl.style.display = '';
+  }
+
+  if (adminToggleBtn) {
+    adminToggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (adminDashboard.classList.contains('visible')) {
+        hideAdminDashboard();
+      } else {
+        showAdminDashboard();
+      }
+    });
+  }
+  if (closeAdminBtn) {
+    closeAdminBtn.addEventListener('click', () => hideAdminDashboard());
+  }
+
+  // Like button functionality (increment, toggle class and count) - fully preserved
+  const likeButtons = document.querySelectorAll('.like-btn');
+  likeButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const likeSpan = btn.querySelector('.like-counter');
+      let currentLikes = parseInt(likeSpan.innerText, 10);
+      const icon = btn.querySelector('i');
+      if (btn.classList.contains('liked')) {
+        currentLikes -= 1;
+        btn.classList.remove('liked');
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+      } else {
+        currentLikes += 1;
+        btn.classList.add('liked');
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+      }
+      likeSpan.innerText = currentLikes;
+      btn.setAttribute('data-likes', currentLikes);
+    });
+  });
+
+  // Dummy interactive alerts for event/group join buttons (demo community vibe)
+  const eventJoinBtns = document.querySelectorAll('.event-join');
+  const groupJoinBtns = document.querySelectorAll('.group-join');
+  function handleJoinAlert(type, name) {
+    alert(`✨ You've shown interest in ${type} "${name}". Community managers will be in touch! (demo interaction)`);
+  }
+  eventJoinBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const eventItem = btn.closest('.event-item');
+      const eventNameElem = eventItem?.querySelector('.event-info strong');
+      const eventName = eventNameElem ? eventNameElem.innerText : 'this event';
+      handleJoinAlert('event', eventName);
+    });
+  });
+  groupJoinBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const groupItem = btn.closest('.group-item');
+      const groupNameElem = groupItem?.querySelector('.group-info strong');
+      const groupName = groupNameElem ? groupNameElem.innerText : 'this group';
+      handleJoinAlert('group', groupName);
+    });
+  });
+
+  // "Create post" and "Get started" buttons preserved
+  const createPostBtn = document.getElementById('createPostBtn');
+  if (createPostBtn) {
+    createPostBtn.addEventListener('click', () => {
+      alert("🌟 Create a new post: Share your thoughts, events, or media (demo feature).");
+    });
+  }
+  const getStartedBtn = document.getElementById('getStartedBtn');
+  if (getStartedBtn) {
+    getStartedBtn.addEventListener('click', () => {
+      alert("🚀 Welcome! Join the network today — sign up for full access.");
+    });
+  }
+  const joinNavBtn = document.querySelector('.nav-links .btn-primary');
+  if (joinNavBtn) {
+    joinNavBtn.addEventListener('click', () => {
+      alert("💙 Join CircleConnect and start connecting with inspiring people.");
+    });
+  }
+  const signInBtn = document.querySelector('.btn-outline-light:not(#adminToggleBtn)');
+  if (signInBtn && signInBtn.innerText.includes('Sign in')) {
+    signInBtn.addEventListener('click', () => {
+      alert("🔐 Sign in / create account — community access coming soon.");
+    });
+  }
+
+  // Admin table action demos (remove/ignore/promote etc)
+  document.querySelectorAll('.action-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const action = btn.innerText.toLowerCase();
+      if (action === 'remove') alert("⚠️ [Demo] Post removed from reported list.");
+      else if (action === 'ignore') alert("🔍 [Demo] Report ignored.");
+      else if (action === 'promote') alert("👑 User promoted to moderator (demo).");
+      else if (action === 'demote') alert("⬇️ User demoted to member.");
+      else if (action === 'suspend') alert("⛔ User suspended (demo action).");
+      else alert(`Admin action: ${btn.innerText} (demo)`);
+    });
+  });
 </script>
 </body>
 </html>
