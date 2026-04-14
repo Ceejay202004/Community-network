@@ -21,6 +21,58 @@
     }
     initData();
 
+    // ===== SEED SAMPLE POSTS (with exact names you want) =====
+    function seedSamplePosts() {
+        const posts = getPosts();
+        if (posts.length === 0) {
+            const samplePosts = [
+                {
+                    id: "sample1",
+                    author: "mia@circleconnect.com",
+                    authorName: "Mia Chen",
+                    content: "✨ So excited to announce our monthly 'Green Neighbors' meetup this Saturday! Let's come together to share gardening tips and community garden updates. Everyone is welcome 🌱🌻",
+                    image: null,
+                    status: "approved",
+                    likes: [],
+                    comments: [],
+                    shares: 0,
+                    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: "sample2",
+                    author: "daniel@circleconnect.com",
+                    authorName: "Daniel Okonkwo",
+                    content: "🚀 Open-source collaboration night was a blast! We built the first prototype of our community toolkit. Check out the repo and contribute: github.com/circleconnect/toolkit",
+                    image: null,
+                    status: "approved",
+                    likes: [],
+                    comments: [],
+                    shares: 0,
+                    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: "sample3",
+                    author: "elena@circleconnect.com",
+                    authorName: "Elena Rossi",
+                    content: "🎨 Calling all artists! Our virtual gallery night is happening next Friday. Showcase your work and get inspired. Signup link in bio — let's make art together!",
+                    image: null,
+                    status: "approved",
+                    likes: [],
+                    comments: [],
+                    shares: 0,
+                    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+            savePosts(samplePosts);
+        }
+    }
+
+    // Call it immediately after initData
+    seedSamplePosts();
+
     // ===== DARK MODE =====
     function initDarkMode() {
         const isDark = localStorage.getItem('darkMode') === 'true';
