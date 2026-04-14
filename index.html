@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>Community Network • CircleConnect</title>
+    <title>CircleConnect • Community Network + Feed</title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -13,15 +13,15 @@
     <meta name="apple-mobile-web-app-title" content="CommNet">
     
     <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Main Styles (your existing external CSS) -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- Extra styles for admin dashboard (will not break your design) -->
+    <!-- Extra styles for admin dashboard and sidebar widgets -->
     <style>
-        /* Admin Dashboard specific styles - these only affect the dashboard panel */
+        /* Admin Dashboard specific styles */
         .admin-dashboard {
             display: none;
             background: white;
@@ -57,17 +57,42 @@
             border-bottom: 1px solid #e2e8f0;
             text-align: left;
         }
-        .action-btn {
-            background: none;
-            border: none;
-            color: #4f46e5;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
         .action-btn.danger {
             color: #ef4444;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
-        /* Make sure navbar button fits with your design */
+        /* Sidebar widgets */
+        .event-item, .group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .btn-sm {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+        }
+        .btn-sm:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .trending-tag {
+            background: #f1f5f9;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin: 0.2rem;
+        }
         #adminToggleBtn {
             margin-left: 0.5rem;
         }
@@ -84,7 +109,6 @@
     <button class="menu-toggle" id="mobileMenuBtn" aria-label="Menu">
       <i class="fas fa-bars"></i>
     </button>
-    <!-- Dark Mode Toggle Button -->
     <button class="dark-mode-toggle-nav" id="darkModeToggleNav" aria-label="Dark mode">
       <i class="fas fa-moon"></i>
     </button>
@@ -94,7 +118,7 @@
       <a href="#" id="navGroups">Groups</a>
       <a href="#" id="navEvents">Events</a>
       <a href="#" id="navMembers">Members</a>
-      <!-- NEW: Admin Panel Button (only visible to admin) -->
+      <!-- Admin Panel Button (only visible to admin) -->
       <button class="btn-outline-light" id="adminToggleBtn" style="display: none;"><i class="fas fa-lock"></i> Admin Panel</button>
       <button class="btn-outline-light" id="navSignInBtn"><i class="far fa-user-circle"></i> Sign in</button>
       <button class="btn-primary" id="navJoinBtn">Join now</button>
@@ -135,7 +159,7 @@
     </div>
   </div>
 
-  <!-- ==================== ADMIN DASHBOARD (NEW) ==================== -->
+  <!-- ==================== ADMIN DASHBOARD ==================== -->
   <div class="container">
     <div id="adminDashboard" class="admin-dashboard">
       <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -156,7 +180,7 @@
     </div>
   </div>
 
-  <!-- ==================== YOUR EXISTING APP (FULL FUNCTIONALITY) ==================== -->
+  <!-- ==================== APP (REGISTRATION / LOGIN / MAIN) ==================== -->
   <div class="app-wrapper">
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -172,7 +196,6 @@
       <h1>🇵🇭 Community Network</h1>
       <div class="subtitle">Register to connect with your community</div>
       <form id="registerForm">
-        <!-- ... your full registration form ... -->
         <div class="form-group">
           <label>Full Name</label>
           <div class="input-wrapper">
@@ -409,7 +432,62 @@
               <div class="stat-item"><span class="stat-number" id="approvedPosts">0</span><div>Approved</div></div>
               <div class="stat-item"><span class="stat-number" id="pendingPosts">0</span><div>Pending</div></div>
             </div>
-            <div id="postsList" class="posts-grid"></div>
+            <div id="postsList" class="posts-grid">
+              <!-- Post 1 -->
+              <div class="post-card" data-post-id="1">
+                <div class="post-author">
+                  <div class="avatar"><i class="fas fa-user-circle"></i></div>
+                  <div class="author-info">
+                    <h4>Mia Chen <span style="font-weight: normal; font-size:0.75rem;">• Community Leader</span></h4>
+                    <p>2 hours ago</p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>✨ So excited to announce our monthly "Green Neighbors" meetup this Saturday! Let's come together to share gardening tips and community garden updates. Everyone is welcome 🌱🌻</p>
+                </div>
+                <div class="post-stats">
+                  <button class="like-btn" data-likes="42"><i class="far fa-heart"></i> <span class="like-counter">42</span></button>
+                  <button class="comment-btn"><i class="far fa-comment"></i> 12 comments</button>
+                  <button><i class="far fa-share-square"></i> Share</button>
+                </div>
+              </div>
+              <!-- Post 2 -->
+              <div class="post-card" data-post-id="2">
+                <div class="post-author">
+                  <div class="avatar"><i class="fas fa-laptop-code"></i></div>
+                  <div class="author-info">
+                    <h4>Daniel Okonkwo <span style="font-weight: normal;">• Tech Hub</span></h4>
+                    <p>5 hours ago</p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>🚀 Open-source collaboration night was a blast! We built the first prototype of our community toolkit. Check out the repo and contribute: github.com/circleconnect/toolkit</p>
+                </div>
+                <div class="post-stats">
+                  <button class="like-btn" data-likes="103"><i class="far fa-heart"></i> <span class="like-counter">103</span></button>
+                  <button class="comment-btn"><i class="far fa-comment"></i> 28 comments</button>
+                  <button><i class="far fa-share-square"></i> Share</button>
+                </div>
+              </div>
+              <!-- Post 3 -->
+              <div class="post-card" data-post-id="3">
+                <div class="post-author">
+                  <div class="avatar"><i class="fas fa-camera"></i></div>
+                  <div class="author-info">
+                    <h4>Elena Rossi <span style="font-weight: normal;">• Creative Collective</span></h4>
+                    <p>Yesterday</p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>🎨 Calling all artists! Our virtual gallery night is happening next Friday. Showcase your work and get inspired. Signup link in bio — let's make art together!</p>
+                </div>
+                <div class="post-stats">
+                  <button class="like-btn" data-likes="67"><i class="far fa-heart"></i> <span class="like-counter">67</span></button>
+                  <button class="comment-btn"><i class="far fa-comment"></i> 19 comments</button>
+                  <button><i class="far fa-share-square"></i> Share</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Members Tab -->
@@ -487,30 +565,59 @@
           </div>
         </div>
 
-        <!-- Right Sidebar -->
-        <div class="right-sidebar" style="display: none;">
+        <!-- Right Sidebar (now visible with widgets) -->
+        <div class="right-sidebar" style="display: block;">
+          <!-- Upcoming Events Widget -->
           <div class="sidebar-card">
-            <h3>📊 Community Stats</h3>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-              <div style="display: flex; justify-content: space-between;">
-                <span>Total Members:</span>
-                <span style="font-weight: 700;" id="statTotalMembers">0</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Online Now:</span>
-                <span style="font-weight: 700; color: #22c55e;" id="statOnlineMembers">0</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Node Hosts:</span>
-                <span style="font-weight: 700; color: #8b5cf6;" id="statHostMembers">0</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Total Posts:</span>
-                <span style="font-weight: 700;" id="statTotalPosts">0</span>
-              </div>
+            <h3><i class="fas fa-calendar-alt" style="color: var(--primary);"></i> Upcoming events</h3>
+            <div class="event-item">
+              <div class="event-info"><strong>🌿 Community Cleanup</strong><span>May 18, 10:00 AM</span></div>
+              <button class="btn-sm event-join">Join</button>
             </div>
-            <h3 style="margin: 20px 0 15px;">🟢 Online Members</h3>
-            <div id="onlineMembersList"></div>
+            <div class="event-item">
+              <div class="event-info"><strong>💡 Web3 & Future of Networks</strong><span>May 20, 6:00 PM</span></div>
+              <button class="btn-sm event-join">Interested</button>
+            </div>
+            <div class="event-item">
+              <div class="event-info"><strong>🎤 Open Mic Night</strong><span>May 25, 7:30 PM</span></div>
+              <button class="btn-sm event-join">RSVP</button>
+            </div>
+          </div>
+
+          <!-- Popular Groups Widget -->
+          <div class="sidebar-card">
+            <h3><i class="fas fa-users"></i> Popular groups</h3>
+            <div class="group-item">
+              <div class="group-info"><strong>🌱 Wellness Circle</strong><span>1,230 members</span></div>
+              <button class="btn-sm group-join">Join</button>
+            </div>
+            <div class="group-item">
+              <div class="group-info"><strong>💻 Remote Devs</strong><span>945 members</span></div>
+              <button class="btn-sm group-join">Join</button>
+            </div>
+            <div class="group-item">
+              <div class="group-info"><strong>📸 Photography Lovers</strong><span>672 members</span></div>
+              <button class="btn-sm group-join">Join</button>
+            </div>
+            <div class="group-item">
+              <div class="group-info"><strong>🌍 Climate Action</strong><span>1.1k members</span></div>
+              <button class="btn-sm group-join">Join</button>
+            </div>
+          </div>
+
+          <!-- Trending Topics / Tags -->
+          <div class="sidebar-card">
+            <h3><i class="fas fa-fire"></i> Trending topics</h3>
+            <div>
+              <span class="trending-tag">#communityfirst</span>
+              <span class="trending-tag">#sustainability</span>
+              <span class="trending-tag">#networkingtips</span>
+              <span class="trending-tag">#creativegrowth</span>
+              <span class="trending-tag">#wellnesswednesday</span>
+            </div>
+            <div style="margin-top: 1rem;">
+              <p style="font-size:0.75rem; color: var(--gray-600);"><i class="fas fa-chart-line"></i> Active discussions: 142 ongoing</p>
+            </div>
           </div>
         </div>
       </div>
@@ -611,7 +718,7 @@
   </div>
 </main>
 
-<!-- ==================== MODERN FOOTER ==================== -->
+<!-- ==================== FOOTER ==================== -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -646,7 +753,7 @@
 </footer>
 
 <script>
-  // ===== PWA & MODAL HANDLERS (unchanged) =====
+  // ===== PWA & MODAL HANDLERS =====
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
@@ -655,7 +762,7 @@
     });
   }
 
-  // ===== PRIVACY & TERMS MODAL HANDLERS (unchanged) =====
+  // ===== PRIVACY & TERMS MODAL HANDLERS =====
   const privacyModal = document.getElementById('privacyModal');
   const termsModal = document.getElementById('termsModal');
   const privacyLink = document.getElementById('privacyPolicyLink');
@@ -708,7 +815,7 @@
     if (e.target === termsModal) termsModal.style.display = 'none';
   });
 
-  // ===== MODERN NAVBAR & HERO INTERACTIONS =====
+  // ===== MOBILE MENU =====
   const menuToggle = document.getElementById('mobileMenuBtn');
   const navLinksDiv = document.getElementById('navLinks');
   if (menuToggle) {
@@ -717,6 +824,7 @@
     });
   }
 
+  // ===== HERO STATS UPDATE (dummy) =====
   function updateHeroStats(membersCount, postsCount) {
     const statMembers = document.getElementById('statMembersHero');
     const statPosts = document.getElementById('statPostsHero');
@@ -724,17 +832,33 @@
     if (statPosts) statPosts.textContent = postsCount;
   }
 
-  // ===== ADD ADMIN DASHBOARD FUNCTIONALITY =====
-  // This assumes your external script.js handles users, posts, currentUser, etc.
-  // We will integrate admin features that hook into those global variables.
-  
-  // Wait for the external script to load (or we provide fallback)
+  // ===== LIKE BUTTON FUNCTIONALITY FOR STATIC POSTS =====
+  document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      let countSpan = this.querySelector('.like-counter');
+      let count = parseInt(countSpan.innerText);
+      let icon = this.querySelector('i');
+      if (this.classList.contains('liked')) {
+        count--;
+        this.classList.remove('liked');
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+      } else {
+        count++;
+        this.classList.add('liked');
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+      }
+      countSpan.innerText = count;
+    });
+  });
+
+  // ===== ADMIN DASHBOARD TOGGLE (integration with your script.js) =====
   setTimeout(() => {
     const adminToggleBtn = document.getElementById('adminToggleBtn');
     const adminDashboard = document.getElementById('adminDashboard');
     const closeAdminBtn = document.getElementById('closeAdminBtn');
     
-    // Function to refresh admin panel data (uses global users, posts, currentUser)
     function refreshAdminPanel() {
       if (typeof window.users !== 'undefined' && window.currentUser && window.currentUser.role === 'admin') {
         const statsDiv = document.getElementById('adminStats');
@@ -755,7 +879,6 @@
               <td><button class="action-btn danger" data-user-id="${user.id}">Delete User</button></td>
             </tr>
           `).join('');
-          // Attach delete handlers
           document.querySelectorAll('[data-user-id]').forEach(btn => {
             btn.addEventListener('click', (e) => {
               const userId = parseInt(btn.dataset.userId);
@@ -784,28 +907,21 @@
       adminToggleBtn.addEventListener('click', () => {
         if (window.currentUser && window.currentUser.role === 'admin') {
           adminDashboard.classList.toggle('visible');
-          if (adminDashboard.classList.contains('visible')) {
-            refreshAdminPanel();
-          }
+          if (adminDashboard.classList.contains('visible')) refreshAdminPanel();
         } else {
           alert('Admin access only');
         }
       });
     }
     if (closeAdminBtn) {
-      closeAdminBtn.addEventListener('click', () => {
-        adminDashboard.classList.remove('visible');
-      });
+      closeAdminBtn.addEventListener('click', () => adminDashboard.classList.remove('visible'));
     }
     
-    // Show/hide admin button based on user role
     function updateAdminButtonVisibility() {
       if (adminToggleBtn && window.currentUser) {
         adminToggleBtn.style.display = window.currentUser.role === 'admin' ? 'inline-block' : 'none';
       }
     }
-    
-    // Hook into existing script's renderApp or similar if possible
     if (typeof window.renderApp === 'function') {
       const originalRenderApp = window.renderApp;
       window.renderApp = function() {
@@ -813,15 +929,12 @@
         updateAdminButtonVisibility();
       };
     }
-    // Also listen for login/registration events
     window.addEventListener('userLoggedIn', updateAdminButtonVisibility);
-    
-    // Expose refresh function globally
     window.refreshAdminPanel = refreshAdminPanel;
   }, 500);
 </script>
 
-<!-- Your existing external script.js (which contains all the app logic) -->
+<!-- Your existing external script.js (contains app logic) -->
 <script defer src="script.js"></script>
 </body>
 </html>
