@@ -1819,6 +1819,112 @@ body.dark .tab-btn.active {
 body.dark .tab-btn.active::after {
     background: #a78bfa;
 }
+/* ==================== ADMIN DASHBOARD ==================== */
+.admin-dashboard {
+    display: none;
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.admin-dashboard.visible {
+    display: block;
+}
+.admin-stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+.stat-card {
+    background: #f1f5f9;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    flex: 1;
+    text-align: center;
+}
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+.admin-table th, .admin-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+.action-btn.danger {
+    color: #ef4444;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* ==================== RIGHT SIDEBAR WIDGETS ==================== */
+.event-item, .group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+.btn-sm {
+    background: none;
+    border: 1px solid #cbd5e1;
+    padding: 0.2rem 0.8rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: all 0.2s;
+}
+.btn-sm:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+.trending-tag {
+    background: #f1f5f9;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    display: inline-block;
+    margin: 0.2rem;
+}
+#adminToggleBtn {
+    margin-left: 0.5rem;
+}
+
+/* ==================== DARK MODE EXTENSIONS ==================== */
+body.dark .admin-dashboard {
+    background: #1e293b;
+    border-color: #334155;
+}
+body.dark .stat-card {
+    background: #334155;
+    color: #e2e8f0;
+}
+body.dark .admin-table th, 
+body.dark .admin-table td {
+    border-bottom-color: #334155;
+}
+body.dark .event-item, 
+body.dark .group-item {
+    border-bottom-color: #334155;
+}
+body.dark .btn-sm {
+    border-color: #475569;
+    color: #e2e8f0;
+}
+body.dark .btn-sm:hover {
+    background: #334155;
+    border-color: #a78bfa;
+}
+body.dark .trending-tag {
+    background: #334155;
+    color: #e2e8f0;
+}
 
 body.dark .interaction-item:hover {
     background: #334155;
