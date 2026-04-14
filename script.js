@@ -21,7 +21,7 @@
     }
     initData();
 
-    // ===== DARK MODE (NEW) =====
+    // ===== DARK MODE =====
     function initDarkMode() {
         const isDark = localStorage.getItem('darkMode') === 'true';
         if (isDark) {
@@ -509,8 +509,13 @@
             if (user.role === 'admin') {
                 document.getElementById('currentUserRole').style.display = 'inline';
                 document.getElementById('tabPending').style.display = 'block';
+                // Show admin toggle button
+                const adminToggleBtn = document.getElementById('adminToggleBtn');
+                if (adminToggleBtn) adminToggleBtn.style.display = 'inline-block';
             } else {
                 document.getElementById('tabPending').style.display = 'none';
+                const adminToggleBtn = document.getElementById('adminToggleBtn');
+                if (adminToggleBtn) adminToggleBtn.style.display = 'none';
             }
             document.getElementById('loginCard').style.display = 'none';
             document.getElementById('registrationCard').style.display = 'none';
@@ -1330,6 +1335,80 @@
             if (document.getElementById('eventsTab').style.display !== 'none') loadEvents();
         });
     }
+
+    // ==================== ADMIN DASHBOARD ====================
+    function refreshAdminPanel() {
+        const users = getUsers();
+        const posts = getPosts();
+        const adminStats = document.getElementById('adminStats');
+        const usersTableBody = document.querySelector('#usersTable tbody');
+        if (adminStats) {
+            adminStats.innerHTML = `
+                <div class="stat-card">Total Users: ${users.length}</div>
+                <div class="stat-card">Total Posts: ${posts.length}</div>
+                <div class="stat-card">Admins: ${users.filter(u => u.role === 'admin').length}</div>
+            `;
+        }
+        if (usersTableBody) {
+            usersTableBody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${escapeHtml(user.fullName)}</td>
+                    <td>${escapeHtml(user.email)}</td>
+                    <td>${escapeHtml(user.role)}</td>
+                    <td><button class="action-btn danger" data-user-id="${user.id}">Delete User</button></td>
+                </tr>
+            `).join('');
+            document.querySelectorAll('[data-user-id]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const userId = btn.dataset.userId;
+                    if (confirm('Delete this user and all their posts?')) {
+                        let usersArr = getUsers();
+                        let postsArr = getPosts();
+                        usersArr = usersArr.filter(u => u.id !== userId);
+                        postsArr = postsArr.filter(p => p.author !== usersArr.find(u => u.id === userId)?.email);
+                        saveUsers(usersArr);
+                        savePosts(postsArr);
+                        if (currentUser && currentUser.id === userId) {
+                            document.getElementById('logoutBtn').click();
+                        } else {
+                            refreshAdminPanel();
+                            loadMembers();
+                            loadFeed();
+                            updateStats();
+                        }
+                        showToast('User deleted');
+                    }
+                });
+            });
+        }
+    }
+
+    const adminToggleBtn = document.getElementById('adminToggleBtn');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const closeAdminBtn = document.getElementById('closeAdminBtn');
+    if (adminToggleBtn && adminDashboard) {
+        adminToggleBtn.addEventListener('click', () => {
+            if (currentUser && currentUser.role === 'admin') {
+                adminDashboard.classList.toggle('visible');
+                if (adminDashboard.classList.contains('visible')) {
+                    refreshAdminPanel();
+                }
+            } else {
+                showToast('Admin access only', true);
+            }
+        });
+    }
+    if (closeAdminBtn) {
+        closeAdminBtn.addEventListener('click', () => {
+            adminDashboard.classList.remove('visible');
+        });
+    }
+
+    // Auto-hide admin dashboard on logout
+    const originalLogout = document.getElementById('logoutBtn').click;
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        if (adminDashboard) adminDashboard.classList.remove('visible');
+    });
 
     hideLoading();
 })();
