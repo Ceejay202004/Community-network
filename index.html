@@ -177,7 +177,8 @@
       <h3>Reported Content (Demo)</h3>
       <table class="admin-table" id="reportsTable">
         <thead><tr><th>Post</th><th>Reported By</th><th>Action</th></tr></thead>
-        <tbody><tr><td colspan="3">No reports yet</td></tr></tbody>
+        <tbody><tr><td colspan="3">No reports yet</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -279,8 +280,60 @@
               <div class="stat-item"><span class="stat-number" id="pendingPosts">0</span><div>Pending</div></div>
             </div>
             <div id="postsList" class="posts-grid">
-              <!-- Sample posts will be loaded dynamically from localStorage -->
-              <!-- The script will populate this with the example posts if none exist -->
+              <!-- Post 1 -->
+              <div class="post-card" data-post-id="1">
+                <div class="post-author">
+                  <div class="avatar"><i class="fas fa-user-circle"></i></div>
+                  <div class="author-info">
+                    <h4>Mia Chen <span style="font-weight: normal; font-size:0.75rem;">• Community Leader</span></h4>
+                    <p>2 hours ago</p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>✨ So excited to announce our monthly "Green Neighbors" meetup this Saturday! Let's come together to share gardening tips and community garden updates. Everyone is welcome 🌱🌻</p>
+                </div>
+                <div class="post-stats">
+                  <button class="like-btn" data-likes="42"><i class="far fa-heart"></i> <span class="like-counter">42</span></button>
+                  <button class="comment-btn"><i class="far fa-comment"></i> 12 comments</button>
+                  <button><i class="far fa-share-square"></i> Share</button>
+                </div>
+              </div>
+              <!-- Post 2 -->
+              <div class="post-card" data-post-id="2">
+                <div class="post-author">
+                  <div class="avatar"><i class="fas fa-laptop-code"></i></div>
+                  <div class="author-info">
+                    <h4>Daniel Okonkwo <span style="font-weight: normal;">• Tech Hub</span></h4>
+                    <p>5 hours ago</p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>🚀 Open-source collaboration night was a blast! We built the first prototype of our community toolkit. Check out the repo and contribute: github.com/circleconnect/toolkit</p>
+                </div>
+                <div class="post-stats">
+                  <button class="like-btn" data-likes="103"><i class="far fa-heart"></i> <span class="like-counter">103</span></button>
+                  <button class="comment-btn"><i class="far fa-comment"></i> 28 comments</button>
+                  <button><i class="far fa-share-square"></i> Share</button>
+                </div>
+              </div>
+              <!-- Post 3 -->
+              <div class="post-card" data-post-id="3">
+                <div class="post-author">
+                  <div class="avatar"><i class="fas fa-camera"></i></div>
+                  <div class="author-info">
+                    <h4>Elena Rossi <span style="font-weight: normal;">• Creative Collective</span></h4>
+                    <p>Yesterday</p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>🎨 Calling all artists! Our virtual gallery night is happening next Friday. Showcase your work and get inspired. Signup link in bio — let's make art together!</p>
+                </div>
+                <div class="post-stats">
+                  <button class="like-btn" data-likes="67"><i class="far fa-heart"></i> <span class="like-counter">67</span></button>
+                  <button class="comment-btn"><i class="far fa-comment"></i> 19 comments</button>
+                  <button><i class="far fa-share-square"></i> Share</button>
+                </div>
+              </div>
             </div>
           </div>
 
