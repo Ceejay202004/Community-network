@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>CircleConnect • Community Network + Admin Dashboard</title>
+    <title>Community Network • CircleConnect</title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -13,115 +13,34 @@
     <meta name="apple-mobile-web-app-title" content="CommNet">
     
     <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <!-- Main Styles (your existing external CSS) -->
+    <!-- Main Styles -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Extra styles for admin dashboard and sidebar widgets -->
-    <style>
-        /* Admin Dashboard specific styles */
-        .admin-dashboard {
-            display: none;
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-        .admin-dashboard.visible {
-            display: block;
-        }
-        .admin-stats {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-        .stat-card {
-            background: #f1f5f9;
-            padding: 0.8rem;
-            border-radius: 0.5rem;
-            flex: 1;
-            text-align: center;
-        }
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0.5rem;
-        }
-        .admin-table th, .admin-table td {
-            padding: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            text-align: left;
-        }
-        .action-btn.danger {
-            color: #ef4444;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        /* Sidebar widgets */
-        .event-item, .group-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .btn-sm {
-            background: none;
-            border: 1px solid #cbd5e1;
-            padding: 0.2rem 0.8rem;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-size: 0.7rem;
-            transition: all 0.2s;
-        }
-        .btn-sm:hover {
-            background: var(--primary-light);
-            border-color: var(--primary);
-        }
-        .trending-tag {
-            background: #f1f5f9;
-            padding: 0.3rem 0.8rem;
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            display: inline-block;
-            margin: 0.2rem;
-        }
-        #adminToggleBtn {
-            margin-left: 0.5rem;
-        }
-        /* Right sidebar visibility */
-        .right-sidebar {
-            display: block;
-        }
-        @media (max-width: 1023px) {
-            .right-sidebar {
-                display: none;
-            }
-        }
-    </style>
+    <script defer src="script.js"></script>
 </head>
 <body>
 
-<!-- ==================== NAVBAR ==================== -->
+<!-- ==================== MODERN NAVBAR ==================== -->
 <nav class="navbar">
   <div class="nav-container">
-    <div class="logo"><i class="fas fa-users"></i> CircleConnect</div>
-    <button class="menu-toggle" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
-    <button class="dark-mode-toggle-nav" id="darkModeToggleNav"><i class="fas fa-moon"></i></button>
+    <div class="logo">
+      <i class="fas fa-users"></i> CircleConnect
+    </div>
+    <button class="menu-toggle" id="mobileMenuBtn" aria-label="Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- NEW: Dark Mode Toggle Button -->
+    <button class="dark-mode-toggle-nav" id="darkModeToggleNav" aria-label="Dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
     <div class="nav-links" id="navLinks">
       <a href="#" class="active" id="navHome">Home</a>
       <a href="#" id="navFeed">Feed</a>
       <a href="#" id="navGroups">Groups</a>
       <a href="#" id="navEvents">Events</a>
       <a href="#" id="navMembers">Members</a>
-      <button class="btn-outline-light" id="adminToggleBtn" style="display: none;"><i class="fas fa-lock"></i> Admin Panel</button>
       <button class="btn-outline-light" id="navSignInBtn"><i class="far fa-user-circle"></i> Sign in</button>
       <button class="btn-primary" id="navJoinBtn">Join now</button>
     </div>
@@ -129,7 +48,7 @@
 </nav>
 
 <main>
-  <!-- HERO SECTION -->
+  <!-- ==================== HERO SECTION ==================== -->
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-content">
@@ -151,7 +70,7 @@
     </div>
   </section>
 
-  <!-- QUICK STATS ROW -->
+  <!-- ==================== QUICK STATS ROW ==================== -->
   <div class="container">
     <div class="stats-row" id="statsRow">
       <div><i class="fas fa-globe" style="color: var(--primary);"></i> <span id="statCountries">14+</span> Countries</div>
@@ -161,28 +80,7 @@
     </div>
   </div>
 
-  <!-- ADMIN DASHBOARD (hidden by default) -->
-  <div class="container">
-    <div id="adminDashboard" class="admin-dashboard">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2><i class="fas fa-chalkboard-user"></i> Admin Control Center</h2>
-        <button id="closeAdminBtn" class="btn-outline-light">Close</button>
-      </div>
-      <div class="admin-stats" id="adminStats"></div>
-      <h3>Manage Users</h3>
-      <table class="admin-table" id="usersTable">
-        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <h3>Reported Content (Demo)</h3>
-      <table class="admin-table" id="reportsTable">
-        <thead><tr><th>Post</th><th>Reported By</th><th>Action</th></tr></thead>
-        <tbody><tr><td colspan="3">No reports yet</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- APP WRAPPER (REGISTRATION / LOGIN / MAIN) -->
+  <!-- ==================== YOUR EXISTING APP (FULL FUNCTIONALITY) ==================== -->
   <div class="app-wrapper">
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -193,34 +91,130 @@
       </div>
     </div>
 
-    <!-- Registration Card -->
+    <!-- Registration Card (from original) -->
     <div id="registrationCard" class="form-card">
       <h1>🇵🇭 Community Network</h1>
       <div class="subtitle">Register to connect with your community</div>
       <form id="registerForm">
-        <div class="form-group"><label>Full Name</label><div class="input-wrapper"><i class="fas fa-user"></i><input type="text" id="fullName" placeholder="e.g., Juan Dela Cruz" required></div></div>
-        <div class="form-group"><label>Email</label><div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="email" placeholder="juandelacruz@email.com" required></div></div>
-        <div class="form-group"><label>Password</label><div class="password-field"><i class="fas fa-key"></i><input type="password" id="password" placeholder="Create password" required><i class="fas fa-eye-slash toggle-eye" id="togglePassword"></i></div>
-          <div class="strength-meter"><div class="strength-segment segment-1"></div><div class="strength-segment segment-2"></div><div class="strength-segment segment-3"></div><div class="strength-segment segment-4"></div></div>
-          <div class="strength-text" id="strengthText">Enter password</div>
-        </div>
-        <div class="form-group"><label>Confirm Password</label><div class="password-field"><i class="fas fa-check-circle"></i><input type="password" id="confirmPassword" placeholder="Confirm password" required><i class="fas fa-eye-slash toggle-eye" id="toggleConfirm"></i></div><small id="matchMessage"></small></div>
-        <div class="form-group"><label>Sex / Gender</label><div class="radio-group"><label><input type="radio" name="sex" value="male" checked> Male</label><label><input type="radio" name="sex" value="female"> Female</label><label><input type="radio" name="sex" value="other"> Other</label><label><input type="radio" name="sex" value="prefer-not"> Prefer not</label></div></div>
-        <div class="form-group"><label>Birthdate</label><div class="input-wrapper"><i class="fas fa-calendar"></i><input type="date" id="birthdate" required></div></div>
-        <div class="form-group"><label>Philippine Address</label>
-          <div class="address-container">
-            <select id="region" class="address-select" required><option value="">Select Region</option><option value="NCR">National Capital Region (NCR)</option><option value="CAR">Cordillera Administrative Region (CAR)</option><option value="I">Region I (Ilocos Region)</option><option value="II">Region II (Cagayan Valley)</option><option value="III">Region III (Central Luzon)</option><option value="IV-A">Region IV-A (CALABARZON)</option><option value="V">Region V (Bicol Region)</option><option value="VI">Region VI (Western Visayas)</option><option value="VII">Region VII (Central Visayas)</option><option value="VIII">Region VIII (Eastern Visayas)</option><option value="IX">Region IX (Zamboanga Peninsula)</option><option value="X">Region X (Northern Mindanao)</option><option value="XI">Region XI (Davao Region)</option><option value="XII">Region XII (SOCCSKSARGEN)</option><option value="XIII">Region XIII (Caraga)</option><option value="BARMM">Bangsamoro Autonomous Region (BARMM)</option></select>
-            <select id="province" class="address-select" required disabled><option value="">Select Province</option></select>
-            <select id="city" class="address-select" required disabled><option value="">Select City/Municipality</option></select>
-            <select id="barangay" class="address-select" required disabled><option value="">Select Barangay</option></select>
-            <div class="address-row"><input type="text" id="street" class="street-input" placeholder="Street, Building, Unit" required><input type="text" id="zip" class="zip-input" placeholder="ZIP" maxlength="4" required></div>
-            <div class="location-badge" id="locationSummary"><i class="fas fa-map-marker-alt"></i><span>Complete address will appear here</span></div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" id="fullName" placeholder="e.g., Juan Dela Cruz" required>
           </div>
         </div>
-        <div class="form-group"><label>Join as:</label><select id="userRole" required><option value="member">Community Member</option><option value="node-host">Node Host</option><option value="volunteer">Volunteer</option><option value="admin">Admin</option></select></div>
-        <div class="privacy-card"><div class="checkbox-item"><input type="checkbox" id="privacyCheck" required><label for="privacyCheck">I have read and agree to the <a href="#" id="privacyPolicyLink" class="privacy-link">Privacy Policy</a> and <a href="#" id="termsLink" class="privacy-link">Terms of Service</a></label></div></div>
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="juandelacruz@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="password-field">
+            <i class="fas fa-key"></i>
+            <input type="password" id="password" placeholder="Create password" required>
+            <i class="fas fa-eye-slash toggle-eye" id="togglePassword"></i>
+          </div>
+          <div class="strength-meter">
+            <div class="strength-segment segment-1"></div>
+            <div class="strength-segment segment-2"></div>
+            <div class="strength-segment segment-3"></div>
+            <div class="strength-segment segment-4"></div>
+          </div>
+          <div class="strength-text" id="strengthText">Enter password</div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <div class="password-field">
+            <i class="fas fa-check-circle"></i>
+            <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+            <i class="fas fa-eye-slash toggle-eye" id="toggleConfirm"></i>
+          </div>
+          <small id="matchMessage"></small>
+        </div>
+        <div class="form-group">
+          <label>Sex / Gender</label>
+          <div class="radio-group">
+            <label><input type="radio" name="sex" value="male" checked> Male</label>
+            <label><input type="radio" name="sex" value="female"> Female</label>
+            <label><input type="radio" name="sex" value="other"> Other</label>
+            <label><input type="radio" name="sex" value="prefer-not"> Prefer not</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Birthdate</label>
+          <div class="input-wrapper">
+            <i class="fas fa-calendar"></i>
+            <input type="date" id="birthdate" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Philippine Address</label>
+          <div class="address-container">
+            <select id="region" class="address-select" required>
+              <option value="">Select Region</option>
+              <option value="NCR">National Capital Region (NCR)</option>
+              <option value="CAR">Cordillera Administrative Region (CAR)</option>
+              <option value="I">Region I (Ilocos Region)</option>
+              <option value="II">Region II (Cagayan Valley)</option>
+              <option value="III">Region III (Central Luzon)</option>
+              <option value="IV-A">Region IV-A (CALABARZON)</option>
+              <option value="V">Region V (Bicol Region)</option>
+              <option value="VI">Region VI (Western Visayas)</option>
+              <option value="VII">Region VII (Central Visayas)</option>
+              <option value="VIII">Region VIII (Eastern Visayas)</option>
+              <option value="IX">Region IX (Zamboanga Peninsula)</option>
+              <option value="X">Region X (Northern Mindanao)</option>
+              <option value="XI">Region XI (Davao Region)</option>
+              <option value="XII">Region XII (SOCCSKSARGEN)</option>
+              <option value="XIII">Region XIII (Caraga)</option>
+              <option value="BARMM">Bangsamoro Autonomous Region (BARMM)</option>
+            </select>
+            <select id="province" class="address-select" required disabled>
+              <option value="">Select Province</option>
+            </select>
+            <select id="city" class="address-select" required disabled>
+              <option value="">Select City/Municipality</option>
+            </select>
+            <select id="barangay" class="address-select" required disabled>
+              <option value="">Select Barangay</option>
+            </select>
+            <div class="address-row">
+              <input type="text" id="street" class="street-input" placeholder="Street, Building, Unit" required>
+              <input type="text" id="zip" class="zip-input" placeholder="ZIP" maxlength="4" required>
+            </div>
+            <div class="location-badge" id="locationSummary">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Complete address will appear here</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Join as:</label>
+          <select id="userRole" required>
+            <option value="member">Community Member</option>
+            <option value="node-host">Node Host</option>
+            <option value="volunteer">Volunteer</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="privacy-card">
+          <div class="checkbox-item">
+            <input type="checkbox" id="privacyCheck" required>
+            <label for="privacyCheck">
+              I have read and agree to the 
+              <a href="#" id="privacyPolicyLink" class="privacy-link">Privacy Policy</a> 
+              and 
+              <a href="#" id="termsLink" class="privacy-link">Terms of Service</a>
+            </label>
+          </div>
+        </div>
         <button type="submit" class="btn-submit" id="registerBtn">Create Account</button>
-        <div class="login-link">Already have an account? <a href="#" id="showLoginBtn">Sign in</a></div>
+        <div class="login-link">
+          Already have an account? <a href="#" id="showLoginBtn">Sign in</a>
+        </div>
       </form>
     </div>
 
@@ -228,13 +222,28 @@
     <div id="loginCard" class="form-card" style="display: none;">
       <h1>Welcome Back</h1>
       <div class="subtitle">Sign in to your account</div>
-      <div class="form-group"><label>Email</label><div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Enter your email"></div></div>
-      <div class="form-group"><label>Password</label><div class="password-field"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Enter your password"><i class="fas fa-eye-slash toggle-eye" id="toggleLoginPassword"></i></div></div>
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="Enter your email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-field">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Enter your password">
+          <i class="fas fa-eye-slash toggle-eye" id="toggleLoginPassword"></i>
+        </div>
+      </div>
       <button class="btn-submit" id="loginBtn">Sign In</button>
-      <div class="login-link"><a href="#" id="showRegisterBtn">← Create new account</a></div>
+      <div class="login-link">
+        <a href="#" id="showRegisterBtn">← Create new account</a>
+      </div>
     </div>
 
-    <!-- Main App (after login) -->
+    <!-- Main App -->
     <div id="mainAppCard" style="display: none;">
       <div class="app-grid">
         <!-- Left Sidebar -->
@@ -251,19 +260,64 @@
                 <span id="currentUserRole" style="background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; display: none;">ADMIN</span>
               </div>
             </div>
-            <button id="editProfileBtn" class="btn-small" style="background: #8b5cf6; margin-top: 10px; width: 100%;"><i class="fas fa-edit"></i> Edit Profile</button>
-            <div class="image-upload-btn" id="uploadProfileBtn" style="margin: 10px 0; padding: 8px; cursor: pointer;"><i class="fas fa-camera"></i> Change Profile Picture</div>
-            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
-            <div class="search-container" style="margin-bottom: 15px;"><div class="search-wrapper" style="position: relative;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i><input type="text" id="searchInput" placeholder="Search posts or members..." style="width: 100%; padding: 12px 15px 12px 45px; border: 1.5px solid #e2e8f0; border-radius: 40px; font-size: 0.95rem; background: white;"></div></div>
-            <div style="display: flex; justify-content: space-around; margin: 15px 0; padding: 10px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;"><div style="text-align: center;"><div style="font-weight: 700; font-size: 1.1rem;" id="quickPosts">0</div><div style="font-size: 0.7rem; color: #64748b;">Posts</div></div><div style="text-align: center;"><div style="font-weight: 700; font-size: 1.1rem;" id="quickMembers">0</div><div style="font-size: 0.7rem; color: #64748b;">Members</div></div><div style="text-align: center;"><div style="font-weight: 700; font-size: 1.1rem;" id="quickUnread">0</div><div style="font-size: 0.7rem; color: #64748b;">Messages</div></div></div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <button class="tab-btn active" id="tabPosts"><i class="fas fa-newspaper"></i> News Feed</button>
-              <button class="tab-btn" id="tabMembers"><i class="fas fa-users"></i> Members</button>
-              <button class="tab-btn" id="tabMessages" data-count="0"><i class="fas fa-comment-dots"></i> Messages</button>
-              <button class="tab-btn" id="tabCreate"><i class="fas fa-pen"></i> Create Post</button>
-              <button class="tab-btn" id="tabPending" style="display: none;"><i class="fas fa-clock"></i> Pending Approval</button>
-              <button class="tab-btn" id="tabEvents"><i class="fas fa-calendar-alt"></i> Events</button>
+            
+            <!-- Edit Profile Button -->
+            <button id="editProfileBtn" class="btn-small" style="background: #8b5cf6; margin-top: 10px; width: 100%;">
+              <i class="fas fa-edit"></i> Edit Profile
+            </button>
+            
+            <!-- Profile Picture Upload -->
+            <div class="image-upload-btn" id="uploadProfileBtn" style="margin: 10px 0; padding: 8px; cursor: pointer;">
+              <i class="fas fa-camera"></i> Change Profile Picture
             </div>
+            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+            
+            <!-- Search Bar -->
+            <div class="search-container" style="margin-bottom: 15px;">
+              <div class="search-wrapper" style="position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                <input type="text" id="searchInput" placeholder="Search posts or members..." style="width: 100%; padding: 12px 15px 12px 45px; border: 1.5px solid #e2e8f0; border-radius: 40px; font-size: 0.95rem; background: white;">
+              </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div style="display: flex; justify-content: space-around; margin: 15px 0; padding: 10px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.1rem;" id="quickPosts">0</div>
+                <div style="font-size: 0.7rem; color: #64748b;">Posts</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.1rem;" id="quickMembers">0</div>
+                <div style="font-size: 0.7rem; color: #64748b;">Members</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.1rem;" id="quickUnread">0</div>
+                <div style="font-size: 0.7rem; color: #64748b;">Messages</div>
+              </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="tab-btn active" id="tabPosts" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-newspaper"></i> News Feed
+              </button>
+              <button class="tab-btn" id="tabMembers" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-users"></i> Members
+              </button>
+              <button class="tab-btn" id="tabMessages" data-count="0" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-comment-dots"></i> Messages
+              </button>
+              <button class="tab-btn" id="tabCreate" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-pen"></i> Create Post
+              </button>
+              <button class="tab-btn" id="tabPending" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px; display: none;">
+                <i class="fas fa-clock"></i> Pending Approval
+              </button>
+              <button class="tab-btn" id="tabEvents" style="width: 100%; text-align: left; padding: 12px; border-radius: 16px;">
+                <i class="fas fa-calendar-alt"></i> Events
+              </button>
+            </div>
+            
             <button class="logout-btn" id="logoutBtn">Logout</button>
           </div>
         </div>
@@ -278,44 +332,108 @@
               <div class="stat-item"><span class="stat-number" id="approvedPosts">0</span><div>Approved</div></div>
               <div class="stat-item"><span class="stat-number" id="pendingPosts">0</span><div>Pending</div></div>
             </div>
-            <div id="postsList" class="posts-grid">
-              <!-- Sample posts will be loaded dynamically from localStorage -->
-              <!-- The script will populate this with the example posts if none exist -->
-            </div>
+            <div id="postsList" class="posts-grid"></div>
           </div>
 
           <!-- Members Tab -->
-          <div id="membersTab" class="form-card" style="display: none;"><h2>👥 Community Members</h2><div class="stats-bar"><div class="stat-item"><span class="stat-number" id="totalMembers">0</span><div>Total</div></div><div class="stat-item"><span class="stat-number" id="onlineMembers">0</span><div>Online</div></div><div class="stat-item"><span class="stat-number" id="hostMembers">0</span><div>Hosts</div></div></div><div id="membersList" class="members-grid"></div></div>
-          <div id="messagesTab" class="form-card" style="display: none;"><h2>💬 Conversations</h2><div id="conversationsList" class="members-grid"></div></div>
-          <div id="chatView" class="form-card" style="display: none; padding: 0;"><div class="chat-container"><div class="chat-header"><button class="back-btn" id="closeChatBtn">←</button><div class="member-avatar" id="chatAvatar">JD</div><div><div id="chatWithName" style="font-weight: 700;"></div><div id="chatWithStatus" style="font-size: 0.7rem; color: #64748b;">Offline</div></div></div><div class="chat-messages" id="chatMessages"></div><div class="chat-input"><input type="text" id="messageInput" placeholder="Type a message..."><button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button></div></div></div>
-          <div id="createTab" class="form-card" style="display: none;"><h2>➕ Create Post</h2><div class="form-group"><textarea id="postContent" placeholder="What's on your mind?" rows="3"></textarea></div><div class="image-upload-btn" id="uploadPostImageBtn" style="cursor: pointer;"><i class="fas fa-image"></i> Add Image to Post</div><input type="file" id="postImageInput" accept="image/*" style="display: none;"><div id="postImagePreview" style="display: none; margin-top: 10px;"><img id="postPreviewImg" class="image-preview"><button type="button" id="removePostImageBtn" class="btn-small" style="background: #ef4444; margin-top: 5px;">Remove Image</button></div><button class="btn-submit" id="createPostBtn" style="margin-top: 15px;">Post</button></div>
-          <div id="pendingTab" class="form-card" style="display: none;"><h2>⏳ Pending Approval</h2><div id="pendingList" class="posts-grid"></div></div>
-          <div id="profilePageTab" class="form-card" style="display: none;"><div id="profilePageContent"></div><button id="closeProfilePageBtn" class="btn-small" style="background: #64748b; margin-top: 15px;">← Back to Members</button></div>
-          <div id="eventsTab" class="form-card" style="display: none;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h2>📅 Community Events</h2><button id="createEventBtn" class="btn-small" style="background: #10b981;"><i class="fas fa-plus"></i> Create Event</button></div><div id="eventsList" class="events-grid"></div></div>
+          <div id="membersTab" class="form-card" style="display: none;">
+            <h2>👥 Community Members</h2>
+            <div class="stats-bar">
+              <div class="stat-item"><span class="stat-number" id="totalMembers">0</span><div>Total</div></div>
+              <div class="stat-item"><span class="stat-number" id="onlineMembers">0</span><div>Online</div></div>
+              <div class="stat-item"><span class="stat-number" id="hostMembers">0</span><div>Hosts</div></div>
+            </div>
+            <div id="membersList" class="members-grid"></div>
+          </div>
+
+          <!-- Messages Tab -->
+          <div id="messagesTab" class="form-card" style="display: none;">
+            <h2>💬 Conversations</h2>
+            <div id="conversationsList" class="members-grid"></div>
+          </div>
+
+          <!-- Chat View -->
+          <div id="chatView" class="form-card" style="display: none; padding: 0;">
+            <div class="chat-container">
+              <div class="chat-header">
+                <button class="back-btn" id="closeChatBtn">←</button>
+                <div class="member-avatar" id="chatAvatar" style="display: flex;">JD</div>
+                <div>
+                  <div id="chatWithName" style="font-weight: 700;"></div>
+                  <div id="chatWithStatus" style="font-size: 0.7rem; color: #64748b;">Offline</div>
+                </div>
+              </div>
+              <div class="chat-messages" id="chatMessages"></div>
+              <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Create Tab -->
+          <div id="createTab" class="form-card" style="display: none;">
+            <h2>➕ Create Post</h2>
+            <div class="form-group">
+              <textarea id="postContent" placeholder="What's on your mind?" rows="3"></textarea>
+            </div>
+            <div class="image-upload-btn" id="uploadPostImageBtn" style="cursor: pointer;">
+              <i class="fas fa-image"></i> Add Image to Post
+            </div>
+            <input type="file" id="postImageInput" accept="image/*" style="display: none;">
+            <div id="postImagePreview" style="display: none; margin-top: 10px;">
+              <img id="postPreviewImg" class="image-preview">
+              <button type="button" id="removePostImageBtn" class="btn-small" style="background: #ef4444; margin-top: 5px;">Remove Image</button>
+            </div>
+            <button class="btn-submit" id="createPostBtn" style="margin-top: 15px;">Post</button>
+          </div>
+
+          <!-- Pending Tab -->
+          <div id="pendingTab" class="form-card" style="display: none;">
+            <h2>⏳ Pending Approval</h2>
+            <div id="pendingList" class="posts-grid"></div>
+          </div>
+
+          <!-- Profile Page Tab -->
+          <div id="profilePageTab" class="form-card" style="display: none;">
+            <div id="profilePageContent"></div>
+            <button id="closeProfilePageBtn" class="btn-small" style="background: #64748b; margin-top: 15px;">← Back to Members</button>
+          </div>
+
+          <!-- Events Tab -->
+          <div id="eventsTab" class="form-card" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2>📅 Community Events</h2>
+              <button id="createEventBtn" class="btn-small" style="background: #10b981;"><i class="fas fa-plus"></i> Create Event</button>
+            </div>
+            <div id="eventsList" class="events-grid"></div>
+          </div>
         </div>
 
-        <!-- RIGHT SIDEBAR (Widgets: Events, Groups, Trending) -->
-        <div class="right-sidebar">
-          <!-- Upcoming Events Widget -->
+        <!-- Right Sidebar -->
+        <div class="right-sidebar" style="display: none;">
           <div class="sidebar-card">
-            <h3><i class="fas fa-calendar-alt" style="color: var(--primary);"></i> Upcoming events</h3>
-            <div class="event-item"><div class="event-info"><strong>🌿 Community Cleanup</strong><span>May 18, 10:00 AM</span></div><button class="btn-sm event-join">Join</button></div>
-            <div class="event-item"><div class="event-info"><strong>💡 Web3 & Future of Networks</strong><span>May 20, 6:00 PM</span></div><button class="btn-sm event-join">Interested</button></div>
-            <div class="event-item"><div class="event-info"><strong>🎤 Open Mic Night</strong><span>May 25, 7:30 PM</span></div><button class="btn-sm event-join">RSVP</button></div>
-          </div>
-          <!-- Popular Groups Widget -->
-          <div class="sidebar-card">
-            <h3><i class="fas fa-users"></i> Popular groups</h3>
-            <div class="group-item"><div class="group-info"><strong>🌱 Wellness Circle</strong><span>1,230 members</span></div><button class="btn-sm group-join">Join</button></div>
-            <div class="group-item"><div class="group-info"><strong>💻 Remote Devs</strong><span>945 members</span></div><button class="btn-sm group-join">Join</button></div>
-            <div class="group-item"><div class="group-info"><strong>📸 Photography Lovers</strong><span>672 members</span></div><button class="btn-sm group-join">Join</button></div>
-            <div class="group-item"><div class="group-info"><strong>🌍 Climate Action</strong><span>1.1k members</span></div><button class="btn-sm group-join">Join</button></div>
-          </div>
-          <!-- Trending Topics / Tags -->
-          <div class="sidebar-card">
-            <h3><i class="fas fa-fire"></i> Trending topics</h3>
-            <div><span class="trending-tag">#communityfirst</span><span class="trending-tag">#sustainability</span><span class="trending-tag">#networkingtips</span><span class="trending-tag">#creativegrowth</span><span class="trending-tag">#wellnesswednesday</span></div>
-            <div style="margin-top: 1rem;"><p style="font-size:0.75rem; color: var(--gray-600);"><i class="fas fa-chart-line"></i> Active discussions: 142 ongoing</p></div>
+            <h3>📊 Community Stats</h3>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span>Total Members:</span>
+                <span style="font-weight: 700;" id="statTotalMembers">0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Online Now:</span>
+                <span style="font-weight: 700; color: #22c55e;" id="statOnlineMembers">0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Node Hosts:</span>
+                <span style="font-weight: 700; color: #8b5cf6;" id="statHostMembers">0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Total Posts:</span>
+                <span style="font-weight: 700;" id="statTotalPosts">0</span>
+              </div>
+            </div>
+            <h3 style="margin: 20px 0 15px;">🟢 Online Members</h3>
+            <div id="onlineMembersList"></div>
           </div>
         </div>
       </div>
@@ -324,887 +442,220 @@
     <div class="toast-message" id="toast"></div>
   </div>
 
-  <!-- MODALS -->
-  <div id="privacyModal" class="policy-modal"><div class="policy-modal-content"><span class="close-modal" id="closePrivacyModal">&times;</span><h2>📜 Privacy Policy</h2><div class="policy-text"><h3>1. Information We Collect</h3><p>We collect your name, email, birthdate, and address to create your community profile. Profile pictures and bio are optional.</p><h3>2. How We Use Your Data</h3><p>Your information is used to display your profile, show your posts, and connect you with other community members.</p><h3>3. Data Storage</h3><p>All data is stored locally on your device using localStorage. No data is sent to external servers.</p><h3>4. Your Rights</h3><p>You can edit or delete your profile and posts at any time.</p><h3>5. Data Security</h3><p>Your password is encrypted. No one can access your account without your password.</p></div><button class="close-policy-btn" id="agreePrivacyBtn">I Understand & Agree</button></div></div>
-  <div id="termsModal" class="policy-modal"><div class="policy-modal-content"><span class="close-modal" id="closeTermsModal">&times;</span><h2>📜 Terms of Service</h2><div class="policy-text"><h3>1. Acceptance of Terms</h3><p>By using this Community Network, you agree to these terms.</p><h3>2. Community Guidelines</h3><p>Be respectful. No harassment, hate speech, bullying, or spam.</p><h3>3. Content Ownership</h3><p>You own your content. You grant the community permission to display your posts.</p><h3>4. Admin Rights</h3><p>Admins may remove content that violates guidelines.</p><h3>5. Account Responsibility</h3><p>You are responsible for your account security.</p></div><button class="close-terms-btn" id="agreeTermsBtn">I Understand & Agree</button></div></div>
-  <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 10001;"><div class="form-card" style="max-width: 400px; margin: 0;"><h3>✏️ Edit Profile</h3><div class="form-group"><label>Full Name</label><input type="text" id="editFullName"></div><div class="form-group"><label>Bio</label><textarea id="editBio" rows="3" placeholder="Tell something about yourself..."></textarea></div><div class="form-group"><label>Location</label><input type="text" id="editLocation" placeholder="e.g., Baler, Aurora"></div><div class="form-group"><label>Website</label><input type="text" id="editWebsite" placeholder="https://..."></div><div style="display: flex; gap: 10px;"><button id="saveProfileBtn" class="btn-submit" style="margin: 0;">Save Changes</button><button id="closeModalBtn" class="btn-small" style="background: #64748b;">Cancel</button></div></div></div>
-  <div id="createEventModal" class="policy-modal" style="display: none;"><div class="policy-modal-content" style="max-width: 500px;"><span class="close-modal" id="closeEventModal">&times;</span><h2>📝 Create New Event</h2><div class="form-group"><label>Event Title</label><input type="text" id="eventTitle" placeholder="e.g., Community Cleanup"></div><div class="form-group"><label>Description</label><textarea id="eventDesc" rows="3" placeholder="What's this event about?"></textarea></div><div class="form-group"><label>Date & Time</label><input type="datetime-local" id="eventDatetime"></div><div class="form-group"><label>Location</label><input type="text" id="eventLocation" placeholder="e.g., Barangay Hall"></div><button id="saveEventBtn" class="btn-submit" style="margin-top: 10px;">Create Event</button></div></div>
+  <!-- ==================== MODALS ==================== -->
+  <div id="privacyModal" class="policy-modal">
+    <div class="policy-modal-content">
+      <span class="close-modal" id="closePrivacyModal">&times;</span>
+      <h2>📜 Privacy Policy</h2>
+      <div class="policy-text">
+        <h3>1. Information We Collect</h3>
+        <p>We collect your name, email, birthdate, and address to create your community profile. Profile pictures and bio are optional.</p>
+        <h3>2. How We Use Your Data</h3>
+        <p>Your information is used to display your profile, show your posts, and connect you with other community members.</p>
+        <h3>3. Data Storage</h3>
+        <p>All data is stored locally on your device using localStorage. No data is sent to external servers.</p>
+        <h3>4. Your Rights</h3>
+        <p>You can edit or delete your profile and posts at any time.</p>
+        <h3>5. Data Security</h3>
+        <p>Your password is encrypted. No one can access your account without your password.</p>
+      </div>
+      <button class="close-policy-btn" id="agreePrivacyBtn">I Understand & Agree</button>
+    </div>
+  </div>
+
+  <div id="termsModal" class="policy-modal">
+    <div class="policy-modal-content">
+      <span class="close-modal" id="closeTermsModal">&times;</span>
+      <h2>📜 Terms of Service</h2>
+      <div class="policy-text">
+        <h3>1. Acceptance of Terms</h3>
+        <p>By using this Community Network, you agree to these terms.</p>
+        <h3>2. Community Guidelines</h3>
+        <p>Be respectful. No harassment, hate speech, bullying, or spam.</p>
+        <h3>3. Content Ownership</h3>
+        <p>You own your content. You grant the community permission to display your posts.</p>
+        <h3>4. Admin Rights</h3>
+        <p>Admins may remove content that violates guidelines.</p>
+        <h3>5. Account Responsibility</h3>
+        <p>You are responsible for your account security.</p>
+      </div>
+      <button class="close-terms-btn" id="agreeTermsBtn">I Understand & Agree</button>
+    </div>
+  </div>
+
+  <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 10001;">
+    <div class="form-card" style="max-width: 400px; margin: 0;">
+      <h3>✏️ Edit Profile</h3>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="editFullName">
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea id="editBio" rows="3" placeholder="Tell something about yourself..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="editLocation" placeholder="e.g., Baler, Aurora">
+      </div>
+      <div class="form-group">
+        <label>Website</label>
+        <input type="text" id="editWebsite" placeholder="https://...">
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="saveProfileBtn" class="btn-submit" style="margin: 0;">Save Changes</button>
+        <button id="closeModalBtn" class="btn-small" style="background: #64748b;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="createEventModal" class="policy-modal" style="display: none;">
+    <div class="policy-modal-content" style="max-width: 500px;">
+      <span class="close-modal" id="closeEventModal">&times;</span>
+      <h2>📝 Create New Event</h2>
+      <div class="form-group">
+        <label>Event Title</label>
+        <input type="text" id="eventTitle" placeholder="e.g., Community Cleanup">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="eventDesc" rows="3" placeholder="What's this event about?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Date & Time</label>
+        <input type="datetime-local" id="eventDatetime">
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="eventLocation" placeholder="e.g., Barangay Hall">
+      </div>
+      <button id="saveEventBtn" class="btn-submit" style="margin-top: 10px;">Create Event</button>
+    </div>
+  </div>
 </main>
 
+<!-- ==================== MODERN FOOTER ==================== -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-col"><h4>CircleConnect</h4><a href="#">About us</a><a href="#">Our mission</a><a href="#">Careers</a></div>
-      <div class="footer-col"><h4>Community</h4><a href="#">Guidelines</a><a href="#">Code of conduct</a><a href="#">Support center</a></div>
-      <div class="footer-col"><h4>Resources</h4><a href="#">Blog</a><a href="#">Podcast</a><a href="#">Events calendar</a></div>
-      <div class="footer-col"><h4>Legal</h4><a href="#" id="footerPrivacyLink">Privacy</a><a href="#" id="footerTermsLink">Terms of service</a></div>
+      <div class="footer-col">
+        <h4>CircleConnect</h4>
+        <a href="#">About us</a>
+        <a href="#">Our mission</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="#">Guidelines</a>
+        <a href="#">Code of conduct</a>
+        <a href="#">Support center</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Blog</a>
+        <a href="#">Podcast</a>
+        <a href="#">Events calendar</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#" id="footerPrivacyLink">Privacy</a>
+        <a href="#" id="footerTermsLink">Terms of service</a>
+      </div>
     </div>
-    <div class="copyright"><i class="far fa-copyright"></i> 2025 CircleConnect – Building stronger communities together.</div>
+    <div class="copyright">
+      <i class="far fa-copyright"></i> 2025 CircleConnect – Building stronger communities together.
+    </div>
   </div>
 </footer>
 
 <script>
-  (function() {
-    // ===== DATA STORAGE =====
-    let currentUser = null;
-    let currentChatWith = null;
-    let messageCheckInterval = null;
-    let currentPostImageData = null;
-    let searchQuery = '';
+  // ===== PWA & MODAL HANDLERS (unchanged) =====
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+        .catch(err => console.log('❌ Service Worker failed:', err));
+    });
+  }
 
-    const USERS_KEY = 'cn_users';
-    const POSTS_KEY = 'cn_posts';
-    const MESSAGES_KEY = 'cn_messages';
-    const CONVERSATIONS_KEY = 'cn_conversations';
-    const EVENTS_KEY = 'cn_events';
+  // ===== PRIVACY & TERMS MODAL HANDLERS =====
+  const privacyModal = document.getElementById('privacyModal');
+  const termsModal = document.getElementById('termsModal');
+  const privacyLink = document.getElementById('privacyPolicyLink');
+  const termsLink = document.getElementById('termsLink');
+  const closePrivacy = document.getElementById('closePrivacyModal');
+  const closeTerms = document.getElementById('closeTermsModal');
+  const agreePrivacyBtn = document.getElementById('agreePrivacyBtn');
+  const agreeTermsBtn = document.getElementById('agreeTermsBtn');
+  const privacyCheckbox = document.getElementById('privacyCheck');
 
-    function initData() {
-      if (!localStorage.getItem(USERS_KEY)) localStorage.setItem(USERS_KEY, JSON.stringify([]));
-      if (!localStorage.getItem(POSTS_KEY)) localStorage.setItem(POSTS_KEY, JSON.stringify([]));
-      if (!localStorage.getItem(MESSAGES_KEY)) localStorage.setItem(MESSAGES_KEY, JSON.stringify([]));
-      if (!localStorage.getItem(CONVERSATIONS_KEY)) localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify([]));
-      if (!localStorage.getItem(EVENTS_KEY)) localStorage.setItem(EVENTS_KEY, JSON.stringify([]));
-    }
-    initData();
-
-    // Seed sample posts if none exist AND there are users
-    function seedSamplePosts() {
-      const posts = getPosts();
-      const users = getUsers();
-      if (posts.length === 0 && users.length > 0) {
-        const firstUser = users[0];
-        const samplePosts = [
-          {
-            id: "sample1",
-            author: firstUser.email,
-            authorName: firstUser.fullName,
-            content: "✨ So excited to announce our monthly 'Green Neighbors' meetup this Saturday! Let's come together to share gardening tips and community garden updates. Everyone is welcome 🌱🌻",
-            image: null,
-            status: "approved",
-            likes: [],
-            comments: [],
-            shares: 0,
-            createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-            updatedAt: new Date().toISOString()
-          },
-          {
-            id: "sample2",
-            author: firstUser.email,
-            authorName: firstUser.fullName,
-            content: "🚀 Open-source collaboration night was a blast! We built the first prototype of our community toolkit. Check out the repo and contribute: github.com/circleconnect/toolkit",
-            image: null,
-            status: "approved",
-            likes: [],
-            comments: [],
-            shares: 0,
-            createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-            updatedAt: new Date().toISOString()
-          },
-          {
-            id: "sample3",
-            author: firstUser.email,
-            authorName: firstUser.fullName,
-            content: "🎨 Calling all artists! Our virtual gallery night is happening next Friday. Showcase your work and get inspired. Signup link in bio — let's make art together!",
-            image: null,
-            status: "approved",
-            likes: [],
-            comments: [],
-            shares: 0,
-            createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-            updatedAt: new Date().toISOString()
-          }
-        ];
-        savePosts(samplePosts);
-      }
-    }
-
-    // ===== HELPER FUNCTIONS =====
-    function showToast(msg, isError = false) {
-      const toast = document.getElementById('toast');
-      if (!toast) return;
-      toast.textContent = msg;
-      toast.style.background = isError ? '#dc2626' : '#1e293b';
-      toast.style.display = 'block';
-      setTimeout(() => toast.style.display = 'none', 3000);
-    }
-
-    function showLoading(msg) {
-      const overlay = document.getElementById('loadingOverlay');
-      const message = document.getElementById('loadingMessage');
-      if (message) message.textContent = msg || 'Loading...';
-      if (overlay) overlay.style.display = 'flex';
-    }
-
-    function hideLoading() {
-      const overlay = document.getElementById('loadingOverlay');
-      if (overlay) overlay.style.display = 'none';
-    }
-
-    // Address data (simplified for brevity – keep your full data)
-    const provincesByRegion = {
-      'NCR': ['Metro Manila'],
-      'CAR': ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'],
-      // ... keep your full mapping from original script
-    };
-    const citiesByProvince = {
-      'Metro Manila': ['Manila', 'Quezon City', 'Caloocan', 'Las Piñas', 'Makati', 'Malabon', 'Mandaluyong', 'Marikina', 'Muntinlupa', 'Navotas', 'Parañaque', 'Pasay', 'Pasig', 'Pateros', 'San Juan', 'Taguig', 'Valenzuela'],
-      'Cavite': ['Bacoor', 'Cavite City', 'Dasmariñas', 'General Trias', 'Imus', 'Tagaytay', 'Trece Martires'],
-      // ... add others as needed
-    };
-
-    // Address handlers (keep your existing code, but for brevity I'll assume it's present)
-    // (I will include the full address logic in the final answer – I'm abbreviating here for space)
-
-    // ===== USER FUNCTIONS =====
-    function getUsers() { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
-    function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-    function getPosts() { return JSON.parse(localStorage.getItem(POSTS_KEY)) || []; }
-    function savePosts(posts) { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); }
-    function getMessages() { return JSON.parse(localStorage.getItem(MESSAGES_KEY)) || []; }
-    function saveMessages(messages) { localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages)); }
-    function getConversations() { return JSON.parse(localStorage.getItem(CONVERSATIONS_KEY)) || []; }
-    function saveConversations(convs) { localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(convs)); }
-
-    // ===== PROFILE PICTURE FUNCTIONS =====
-    function saveProfilePicture(email, imageData) {
-      const users = getUsers();
-      const userIndex = users.findIndex(u => u.email === email);
-      if (userIndex !== -1) {
-        users[userIndex].profilePicture = imageData;
-        saveUsers(users);
-        if (currentUser && currentUser.email === email) {
-          currentUser.profilePicture = imageData;
-          updateProfilePictureDisplay(imageData);
-        }
-      }
-    }
-
-    function getProfilePicture(email) {
-      const users = getUsers();
-      const user = users.find(u => u.email === email);
-      return user?.profilePicture || null;
-    }
-
-    function updateProfilePictureDisplay(imageData) {
-      const imgElement = document.getElementById('currentUserProfileImg');
-      const avatarDiv = document.getElementById('currentUserAvatar');
-      if (imageData && imgElement && avatarDiv) {
-        imgElement.src = imageData;
-        imgElement.style.display = 'block';
-        avatarDiv.style.display = 'none';
-      } else if (imgElement && avatarDiv) {
-        imgElement.style.display = 'none';
-        avatarDiv.style.display = 'flex';
-        if (currentUser) avatarDiv.textContent = currentUser.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
-      }
-    }
-
-    // Profile picture upload
-    const uploadProfileBtn = document.getElementById('uploadProfileBtn');
-    const profileImageInput = document.getElementById('profileImageInput');
-    if (uploadProfileBtn && profileImageInput) {
-      uploadProfileBtn.addEventListener('click', () => profileImageInput.click());
-      profileImageInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            saveProfilePicture(currentUser.email, event.target.result);
-            showToast('✓ Profile picture updated!');
-            loadMembers();
-            loadFeed();
-          };
-          reader.readAsDataURL(file);
-        } else if (file) showToast('Please select an image file', true);
-      });
-    }
-
-    // ===== POST IMAGE FUNCTIONS =====
-    const postImageInput = document.getElementById('postImageInput');
-    const uploadPostImageBtn = document.getElementById('uploadPostImageBtn');
-    const postImagePreview = document.getElementById('postImagePreview');
-    const postPreviewImg = document.getElementById('postPreviewImg');
-    const removePostImageBtn = document.getElementById('removePostImageBtn');
-    if (uploadPostImageBtn && postImageInput) {
-      uploadPostImageBtn.addEventListener('click', () => postImageInput.click());
-      postImageInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            currentPostImageData = event.target.result;
-            postPreviewImg.src = currentPostImageData;
-            postImagePreview.style.display = 'block';
-            showToast('✓ Image added to post');
-          };
-          reader.readAsDataURL(file);
-        } else showToast('Please select an image file', true);
-      });
-      if (removePostImageBtn) {
-        removePostImageBtn.addEventListener('click', function() {
-          currentPostImageData = null;
-          postImagePreview.style.display = 'none';
-          postPreviewImg.src = '';
-          postImageInput.value = '';
-          showToast('Image removed');
-        });
-      }
-    }
-
-    // ===== EDIT PROFILE FUNCTIONS =====
-    function editProfile(updatedData) {
-      const users = getUsers();
-      const userIndex = users.findIndex(u => u.email === currentUser.email);
-      if (userIndex !== -1) {
-        users[userIndex] = { ...users[userIndex], ...updatedData };
-        saveUsers(users);
-        currentUser = users[userIndex];
-        document.getElementById('currentUserName').textContent = currentUser.fullName;
-        const avatarDiv = document.getElementById('currentUserAvatar');
-        if (avatarDiv) avatarDiv.textContent = currentUser.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
-        if (currentUser.profilePicture) updateProfilePictureDisplay(currentUser.profilePicture);
-        showToast('✓ Profile updated!');
-        loadMembers();
-        loadFeed();
-      }
-    }
-
-    const editProfileBtn = document.getElementById('editProfileBtn');
-    const editProfileModal = document.getElementById('editProfileModal');
-    const saveProfileBtn = document.getElementById('saveProfileBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    if (editProfileBtn) {
-      editProfileBtn.addEventListener('click', () => {
-        document.getElementById('editFullName').value = currentUser.fullName || '';
-        document.getElementById('editBio').value = currentUser.bio || '';
-        document.getElementById('editLocation').value = currentUser.location || '';
-        document.getElementById('editWebsite').value = currentUser.website || '';
-        editProfileModal.style.display = 'flex';
-      });
-    }
-    if (saveProfileBtn) {
-      saveProfileBtn.addEventListener('click', () => {
-        const updatedData = {
-          fullName: document.getElementById('editFullName').value,
-          bio: document.getElementById('editBio').value,
-          location: document.getElementById('editLocation').value,
-          website: document.getElementById('editWebsite').value
-        };
-        if (!updatedData.fullName.trim()) return showToast('Name cannot be empty', true);
-        editProfile(updatedData);
-        editProfileModal.style.display = 'none';
-      });
-    }
-    if (closeModalBtn) closeModalBtn.addEventListener('click', () => editProfileModal.style.display = 'none');
-    window.addEventListener('click', (e) => { if (e.target === editProfileModal) editProfileModal.style.display = 'none'; });
-
-    // ===== REGISTRATION =====
-    document.getElementById('registerForm')?.addEventListener('submit', function(e) {
+  if (privacyLink) {
+    privacyLink.addEventListener('click', (e) => {
       e.preventDefault();
-      if (!document.getElementById('privacyCheck').checked) return showToast('Please agree to Privacy Policy', true);
-      const password = document.getElementById('password').value;
-      const confirm = document.getElementById('confirmPassword').value;
-      if (password !== confirm) return showToast('Passwords do not match', true);
-      const users = getUsers();
-      const email = document.getElementById('email').value;
-      if (users.find(u => u.email === email)) return showToast('Email already exists', true);
-      const newUser = {
-        id: Date.now().toString(),
-        email: email,
-        password: btoa(password),
-        fullName: document.getElementById('fullName').value,
-        role: document.getElementById('userRole').value,
-        status: 'online',
-        sex: document.querySelector('input[name="sex"]:checked')?.value,
-        birthdate: document.getElementById('birthdate').value,
-        bio: '',
-        location: '',
-        website: '',
-        address: {
-          region: document.getElementById('region')?.selectedOptions[0]?.text || '',
-          province: document.getElementById('province')?.value || '',
-          city: document.getElementById('city')?.value || '',
-          barangay: document.getElementById('barangay')?.value || '',
-          street: document.getElementById('street')?.value || '',
-          zip: document.getElementById('zip')?.value || ''
-        },
-        registeredAt: new Date().toISOString(),
-        lastSeen: new Date().toISOString(),
-        profilePicture: null
-      };
-      users.push(newUser);
-      saveUsers(users);
-      showToast('✓ Registration successful! You can now login');
-      document.getElementById('registerForm').reset();
-      document.getElementById('registrationCard').style.display = 'none';
-      document.getElementById('loginCard').style.display = 'block';
+      privacyModal.style.display = 'flex';
     });
-
-    document.getElementById('showLoginBtn').addEventListener('click', (e) => {
+  }
+  if (termsLink) {
+    termsLink.addEventListener('click', (e) => {
       e.preventDefault();
-      document.getElementById('registrationCard').style.display = 'none';
-      document.getElementById('loginCard').style.display = 'block';
+      termsModal.style.display = 'flex';
     });
-    document.getElementById('showRegisterBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      document.getElementById('loginCard').style.display = 'none';
-      document.getElementById('registrationCard').style.display = 'block';
+  }
+  if (closePrivacy) {
+    closePrivacy.addEventListener('click', () => {
+      privacyModal.style.display = 'none';
     });
-
-    // ===== LOGIN =====
-    document.getElementById('loginBtn').addEventListener('click', function() {
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      if (!email || !password) return showToast('Please enter email and password', true);
-      const users = getUsers();
-      const user = users.find(u => u.email === email && u.password === btoa(password));
-      if (user) {
-        currentUser = user;
-        user.lastSeen = new Date().toISOString();
-        saveUsers(users);
-        showToast('✓ Login successful!');
-        document.getElementById('currentUserName').textContent = user.fullName;
-        document.getElementById('currentUserEmail').textContent = user.email;
-        updateProfilePictureDisplay(user.profilePicture);
-        if (user.role === 'admin') {
-          document.getElementById('currentUserRole').style.display = 'inline';
-          document.getElementById('tabPending').style.display = 'block';
-          const adminToggleBtn = document.getElementById('adminToggleBtn');
-          if (adminToggleBtn) adminToggleBtn.style.display = 'inline-block';
-        } else {
-          document.getElementById('tabPending').style.display = 'none';
-          const adminToggleBtn = document.getElementById('adminToggleBtn');
-          if (adminToggleBtn) adminToggleBtn.style.display = 'none';
-        }
-        document.getElementById('loginCard').style.display = 'none';
-        document.getElementById('registrationCard').style.display = 'none';
-        document.getElementById('mainAppCard').style.display = 'block';
-        loadFeed();
-        loadMembers();
-        loadConversations();
-        updateStats();
-        startMessageCheck();
-        seedSamplePosts(); // Seed sample posts after login if needed
-      } else {
-        showToast('Invalid email or password', true);
-      }
+  }
+  if (closeTerms) {
+    closeTerms.addEventListener('click', () => {
+      termsModal.style.display = 'none';
     });
-
-    // ===== TAB NAVIGATION =====
-    const tabPosts = document.getElementById('tabPosts');
-    const tabMembers = document.getElementById('tabMembers');
-    const tabMessages = document.getElementById('tabMessages');
-    const tabCreate = document.getElementById('tabCreate');
-    const tabPending = document.getElementById('tabPending');
-    const tabEvents = document.getElementById('tabEvents');
-
-    function setActiveTab(tab) {
-      [tabPosts, tabMembers, tabMessages, tabCreate, tabPending, tabEvents].forEach(t => t?.classList.remove('active'));
-      document.getElementById('postsTab').style.display = 'none';
-      document.getElementById('membersTab').style.display = 'none';
-      document.getElementById('messagesTab').style.display = 'none';
-      document.getElementById('createTab').style.display = 'none';
-      document.getElementById('pendingTab').style.display = 'none';
-      document.getElementById('chatView').style.display = 'none';
-      document.getElementById('profilePageTab').style.display = 'none';
-      document.getElementById('eventsTab').style.display = 'none';
-      if (tab === 'posts') { tabPosts.classList.add('active'); document.getElementById('postsTab').style.display = 'block'; loadFeed(); }
-      else if (tab === 'members') { tabMembers.classList.add('active'); document.getElementById('membersTab').style.display = 'block'; loadMembers(); }
-      else if (tab === 'messages') { tabMessages.classList.add('active'); document.getElementById('messagesTab').style.display = 'block'; loadConversations(); }
-      else if (tab === 'create') { tabCreate.classList.add('active'); document.getElementById('createTab').style.display = 'block'; }
-      else if (tab === 'pending') { tabPending.classList.add('active'); document.getElementById('pendingTab').style.display = 'block'; loadPending(); }
-      else if (tab === 'events') { tabEvents.classList.add('active'); document.getElementById('eventsTab').style.display = 'block'; loadEvents(); }
-    }
-
-    tabPosts?.addEventListener('click', () => setActiveTab('posts'));
-    tabMembers?.addEventListener('click', () => setActiveTab('members'));
-    tabMessages?.addEventListener('click', () => setActiveTab('messages'));
-    tabCreate?.addEventListener('click', () => setActiveTab('create'));
-    tabPending?.addEventListener('click', () => setActiveTab('pending'));
-    tabEvents?.addEventListener('click', () => setActiveTab('events'));
-
-    // ===== LOAD FEED =====
-    function loadFeed() {
-      const posts = getPosts().filter(p => p.status === 'approved').sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-      const container = document.getElementById('postsList');
-      document.getElementById('totalPosts').textContent = getPosts().length;
-      document.getElementById('approvedPosts').textContent = getPosts().filter(p => p.status === 'approved').length;
-      document.getElementById('pendingPosts').textContent = getPosts().filter(p => p.status === 'pending').length;
-      if (!container) return;
-      if (posts.length === 0) {
-        container.innerHTML = '<div class="empty-state">No posts yet. Be the first to post!</div>';
-        return;
-      }
-      let html = '';
-      posts.forEach(post => {
-        const liked = post.likes?.includes(currentUser.email);
-        const authorPic = getProfilePicture(post.author);
-        html += `
-          <div class="post-card">
-            <div class="post-header">
-              <div class="post-avatar" onclick="viewProfile('${post.author}')" style="background-image: url('${authorPic || ''}'); background-size: cover; background-position: center;">${!authorPic ? (post.authorName?.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase() || 'U') : ''}</div>
-              <div><div class="post-author" onclick="viewProfile('${post.author}')">${post.authorName}</div><div class="post-date">${new Date(post.createdAt).toLocaleString()}</div></div>
-            </div>
-            <div class="post-content">${post.content}</div>
-            ${post.image ? `<img src="${post.image}" class="post-image" onclick="viewFullImage('${post.image}')">` : ''}
-            <div class="interaction-bar">
-              <div class="interaction-item" onclick="likePost('${post.id}')"><i class="fas fa-heart" style="color: ${liked ? '#ef4444' : '#64748b'};"></i><span>${post.likes?.length || 0}</span></div>
-              <div class="interaction-item" onclick="toggleComments('${post.id}')"><i class="fas fa-comment"></i><span>${post.comments?.length || 0}</span></div>
-              <div class="interaction-item" onclick="sharePost('${post.id}')"><i class="fas fa-share"></i><span>${post.shares || 0}</span></div>
-            </div>
-            <div id="comments-${post.id}" style="display: none;"><div class="comments-section">${post.comments?.map(c => `<div class="comment-card"><div class="comment-header"><div class="comment-avatar" style="background-image: url('${getProfilePicture(c.author) || ''}'); background-size: cover;">${!getProfilePicture(c.author) ? (c.authorName?.charAt(0) || 'U') : ''}</div><div><div class="comment-author">${c.authorName}</div><div class="post-date">${new Date(c.createdAt).toLocaleString()}</div></div></div><div class="comment-content">${c.content}</div></div>`).join('')}<div class="add-comment"><input type="text" id="comment-${post.id}" placeholder="Write a comment..."><button onclick="addComment('${post.id}')">Post</button></div></div></div>
-          </div>
-        `;
-      });
-      container.innerHTML = html;
-    }
-
-    // ===== LOAD MEMBERS =====
-    function loadMembers() {
-      const users = getUsers().filter(u => u.email !== currentUser.email);
-      const container = document.getElementById('membersList');
-      document.getElementById('totalMembers').textContent = getUsers().length;
-      document.getElementById('onlineMembers').textContent = users.filter(u => { const last = u.lastSeen ? new Date(u.lastSeen) : null; return last && (new Date() - last) < 60000; }).length;
-      document.getElementById('hostMembers').textContent = users.filter(u => u.role === 'node-host').length;
-      if (!container) return;
-      if (users.length === 0) { container.innerHTML = '<div class="empty-state">No other members yet</div>'; return; }
-      let html = '';
-      users.forEach(user => {
-        const isOnline = user.lastSeen && (new Date() - new Date(user.lastSeen)) < 60000;
-        const profilePic = user.profilePicture;
-        html += `<div class="member-card" onclick="viewProfile('${user.email}')"><div class="member-header"><div class="member-avatar" style="background-image: url('${profilePic || ''}'); background-size: cover;">${!profilePic ? (user.fullName?.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase() || 'U') : ''}</div><div class="member-info"><div class="member-name">${user.fullName}</div><div class="member-email">${user.email}</div>${user.bio ? `<div class="member-bio">${user.bio.substring(0,60)}${user.bio.length>60?'...':''}</div>` : ''}</div><div class="status-dot" style="background: ${isOnline ? '#22c55e' : '#64748b'};" title="${isOnline ? 'Online' : 'Offline'}"></div></div></div>`;
-      });
-      container.innerHTML = html;
-    }
-
-    // ===== LOAD PENDING =====
-    function loadPending() {
-      if (!currentUser || currentUser.role !== 'admin') return;
-      const posts = getPosts().filter(p => p.status === 'pending').sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-      const container = document.getElementById('pendingList');
-      if (!container) return;
-      if (posts.length === 0) { container.innerHTML = '<div class="empty-state">No pending posts</div>'; return; }
-      let html = '';
-      posts.forEach(post => {
-        const authorPic = getProfilePicture(post.author);
-        html += `<div class="post-card"><div class="post-header"><div class="post-avatar" style="background-image: url('${authorPic||''}'); background-size: cover;">${!authorPic ? (post.authorName?.charAt(0) || 'U') : ''}</div><div><div class="post-author">${post.authorName}</div><div class="post-date">${new Date(post.createdAt).toLocaleString()}</div></div></div><div class="post-content">${post.content}</div>${post.image ? `<img src="${post.image}" class="post-image" onclick="viewFullImage('${post.image}')">` : ''}<div style="display: flex; gap: 10px; margin-top: 10px;"><button class="btn-small btn-approve" onclick="approvePost('${post.id}')">✓ Approve</button><button class="btn-small btn-reject" onclick="rejectPost('${post.id}')">✗ Reject</button></div></div>`;
-      });
-      container.innerHTML = html;
-    }
-
-    // ===== LOAD CONVERSATIONS =====
-    function loadConversations() {
-      const messages = getMessages();
-      const users = getUsers();
-      const conversations = new Map();
-      messages.forEach(msg => {
-        if (msg.sender === currentUser.email || msg.receiver === currentUser.email) {
-          const other = msg.sender === currentUser.email ? msg.receiver : msg.sender;
-          const otherUser = users.find(u => u.email === other);
-          if (!conversations.has(other) || new Date(msg.timestamp) > new Date(conversations.get(other).lastMessage.timestamp)) {
-            conversations.set(other, {
-              with: other,
-              withName: otherUser?.fullName || 'Unknown',
-              withPicture: otherUser?.profilePicture || null,
-              lastMessage: msg,
-              unread: !msg.read && msg.receiver === currentUser.email
-            });
-          }
-        }
-      });
-      const container = document.getElementById('conversationsList');
-      const convList = Array.from(conversations.values()).sort((a,b) => new Date(b.lastMessage.timestamp) - new Date(a.lastMessage.timestamp));
-      document.getElementById('quickUnread').textContent = Array.from(conversations.values()).filter(c => c.unread).length;
-      if (tabMessages) tabMessages.setAttribute('data-count', document.getElementById('quickUnread').textContent);
-      if (!container) return;
-      if (convList.length === 0) { container.innerHTML = '<div class="empty-state">No conversations yet</div>'; return; }
-      let html = '';
-      convList.forEach(conv => {
-        html += `<div class="member-card" onclick="openChat('${conv.with}')"><div class="member-header"><div class="member-avatar" style="background-image: url('${conv.withPicture||''}'); background-size: cover;">${!conv.withPicture ? (conv.withName?.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase() || 'U') : ''}</div><div class="member-info"><div class="member-name">${conv.withName}${conv.unread ? '<span class="unread-badge">New</span>' : ''}</div><div style="font-size:0.8rem; color:#64748b;">${conv.lastMessage.content.substring(0,30)}${conv.lastMessage.content.length>30?'...':''}</div></div></div></div>`;
-      });
-      container.innerHTML = html;
-    }
-
-    // ===== POST ACTIONS =====
-    window.likePost = function(postId) {
-      const posts = getPosts();
-      const post = posts.find(p => p.id === postId);
-      if (post) {
-        if (!post.likes) post.likes = [];
-        const idx = post.likes.indexOf(currentUser.email);
-        if (idx === -1) post.likes.push(currentUser.email);
-        else post.likes.splice(idx, 1);
-        savePosts(posts);
-        loadFeed();
-      }
-    };
-    window.toggleComments = function(postId) {
-      const div = document.getElementById(`comments-${postId}`);
-      if (div) div.style.display = div.style.display === 'none' ? 'block' : 'none';
-    };
-    window.addComment = function(postId) {
-      const input = document.getElementById(`comment-${postId}`);
-      const content = input?.value.trim();
-      if (!content) return;
-      const posts = getPosts();
-      const post = posts.find(p => p.id === postId);
-      if (post) {
-        if (!post.comments) post.comments = [];
-        post.comments.push({ id: Date.now().toString(), author: currentUser.email, authorName: currentUser.fullName, content, createdAt: new Date().toISOString() });
-        savePosts(posts);
-        input.value = '';
-        loadFeed();
-      }
-    };
-    window.sharePost = function(postId) {
-      const posts = getPosts();
-      const post = posts.find(p => p.id === postId);
-      if (post) {
-        post.shares = (post.shares || 0) + 1;
-        savePosts(posts);
-        const shareText = `Check out this post from ${post.authorName}: ${post.content}`;
-        if (navigator.share) navigator.share({ title: 'Community Network Post', text: shareText }).catch(() => prompt('Copy to share:', shareText));
-        else prompt('Copy to share:', shareText);
-        loadFeed();
-      }
-    };
-    window.approvePost = function(postId) {
-      const posts = getPosts();
-      const post = posts.find(p => p.id === postId);
-      if (post) { post.status = 'approved'; savePosts(posts); showToast('✓ Post approved'); loadPending(); loadFeed(); }
-    };
-    window.rejectPost = function(postId) {
-      let posts = getPosts();
-      posts = posts.filter(p => p.id !== postId);
-      savePosts(posts);
-      showToast('✗ Post rejected');
-      loadPending();
-    };
-    window.viewFullImage = function(url) {
-      const modal = document.createElement('div');
-      modal.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:10001; cursor:pointer;';
-      modal.onclick = () => modal.remove();
-      modal.innerHTML = `<img src="${url}" style="max-width:90%; max-height:90%; border-radius:12px;">`;
-      document.body.appendChild(modal);
-    };
-
-    // ===== CREATE POST =====
-    document.getElementById('createPostBtn').addEventListener('click', function() {
-      const content = document.getElementById('postContent').value;
-      if (!content && !currentPostImageData) return showToast('Please enter content or add an image', true);
-      const posts = getPosts();
-      const newPost = {
-        id: Date.now().toString(),
-        author: currentUser.email,
-        authorName: currentUser.fullName,
-        content: content || '',
-        image: currentPostImageData || null,
-        status: currentUser.role === 'admin' ? 'approved' : 'pending',
-        likes: [],
-        comments: [],
-        shares: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      posts.push(newPost);
-      savePosts(posts);
-      showToast('✓ Post created' + (currentUser.role !== 'admin' ? ' (pending approval)' : ''));
-      document.getElementById('postContent').value = '';
-      currentPostImageData = null;
-      if (postImagePreview) postImagePreview.style.display = 'none';
-      if (postPreviewImg) postPreviewImg.src = '';
-      if (postImageInput) postImageInput.value = '';
-      if (currentUser.role === 'admin') loadFeed();
-      setActiveTab('posts');
+  }
+  if (agreePrivacyBtn) {
+    agreePrivacyBtn.addEventListener('click', () => {
+      privacyModal.style.display = 'none';
+      if (privacyCheckbox) privacyCheckbox.checked = true;
+      if (typeof showToast === 'function') showToast('✓ You have agreed to the Privacy Policy');
     });
-
-    // ===== CHAT FUNCTIONS =====
-    window.openChat = function(email) {
-      const users = getUsers();
-      const user = users.find(u => u.email === email);
-      if (!user) return;
-      currentChatWith = email;
-      document.getElementById('messagesTab').style.display = 'none';
-      document.getElementById('chatView').style.display = 'block';
-      document.getElementById('chatWithName').textContent = user.fullName;
-      const chatAvatar = document.getElementById('chatAvatar');
-      if (user.profilePicture) {
-        chatAvatar.style.backgroundImage = `url('${user.profilePicture}')`;
-        chatAvatar.style.backgroundSize = 'cover';
-        chatAvatar.textContent = '';
-      } else {
-        chatAvatar.style.backgroundImage = 'none';
-        chatAvatar.textContent = user.fullName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-      }
-      const lastSeen = user.lastSeen ? new Date(user.lastSeen) : null;
-      const isOnline = lastSeen && (new Date() - lastSeen) < 60000;
-      document.getElementById('chatWithStatus').textContent = isOnline ? '🟢 Online' : '⚫ Offline';
-      document.getElementById('chatWithStatus').style.color = isOnline ? '#22c55e' : '#64748b';
-      loadChatMessages(email);
-      markMessagesAsRead(email);
-    };
-    function loadChatMessages(email) {
-      const messages = getMessages().filter(m => (m.sender === currentUser.email && m.receiver === email) || (m.sender === email && m.receiver === currentUser.email)).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-      const container = document.getElementById('chatMessages');
-      let html = '';
-      messages.forEach(msg => {
-        const isMe = msg.sender === currentUser.email;
-        const time = new Date(msg.timestamp).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-        html += `<div class="message ${isMe ? 'message-sent' : 'message-received'}"><div>${msg.content}</div><div class="message-time">${time}</div></div>`;
-      });
-      container.innerHTML = html;
-      container.scrollTop = container.scrollHeight;
-    }
-    function markMessagesAsRead(sender) {
-      const messages = getMessages();
-      let updated = false;
-      messages.forEach(msg => {
-        if (msg.sender === sender && msg.receiver === currentUser.email && !msg.read) { msg.read = true; updated = true; }
-      });
-      if (updated) { saveMessages(messages); loadConversations(); }
-    }
-    const sendBtn = document.getElementById('sendMessageBtn');
-    if (sendBtn) {
-      sendBtn.addEventListener('click', () => {
-        const input = document.getElementById('messageInput');
-        const content = input.value.trim();
-        if (!content || !currentChatWith) return;
-        const messages = getMessages();
-        messages.push({ id: Date.now().toString(), sender: currentUser.email, senderName: currentUser.fullName, receiver: currentChatWith, content, timestamp: new Date().toISOString(), read: false });
-        saveMessages(messages);
-        input.value = '';
-        loadChatMessages(currentChatWith);
-        loadConversations();
-      });
-    }
-    const closeChatBtn = document.getElementById('closeChatBtn');
-    if (closeChatBtn) closeChatBtn.addEventListener('click', () => { currentChatWith = null; document.getElementById('chatView').style.display = 'none'; document.getElementById('messagesTab').style.display = 'block'; });
-    const messageInput = document.getElementById('messageInput');
-    if (messageInput) messageInput.addEventListener('keypress', e => { if (e.key === 'Enter') document.getElementById('sendMessageBtn').click(); });
-
-    // ===== SEARCH =====
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        if (document.getElementById('postsTab').style.display !== 'none') {
-          document.querySelectorAll('.post-card').forEach(card => {
-            card.style.display = card.textContent.toLowerCase().includes(query) || query === '' ? 'block' : 'none';
-          });
-        }
-        if (document.getElementById('membersTab').style.display !== 'none') {
-          document.querySelectorAll('.member-card').forEach(card => {
-            card.style.display = card.textContent.toLowerCase().includes(query) || query === '' ? 'block' : 'none';
-          });
-        }
-      });
-    }
-
-    // ===== PROFILE PAGE =====
-    window.viewProfile = function(email) {
-      const user = getUsers().find(u => u.email === email);
-      if (!user) return;
-      const userPosts = getPosts().filter(p => p.author === email && p.status === 'approved').sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-      const postCount = userPosts.length;
-      const totalLikes = userPosts.reduce((sum,p)=>sum+(p.likes?.length||0),0);
-      const joinDate = new Date(user.registeredAt).toLocaleDateString('en-PH', { year:'numeric', month:'long', day:'numeric' });
-      document.getElementById('postsTab').style.display = 'none';
-      document.getElementById('membersTab').style.display = 'none';
-      document.getElementById('messagesTab').style.display = 'none';
-      document.getElementById('createTab').style.display = 'none';
-      document.getElementById('pendingTab').style.display = 'none';
-      document.getElementById('chatView').style.display = 'none';
-      document.getElementById('profilePageTab').style.display = 'block';
-      const postsHtml = userPosts.length === 0 ? '<div class="empty-state">No posts yet</div>' : userPosts.map(post => `<div class="profile-post-card"><div class="profile-post-content">${post.content}</div><div class="profile-post-date">${new Date(post.createdAt).toLocaleString()}</div><div><i class="fas fa-heart" style="color:#ef4444;"></i> ${post.likes?.length||0} likes</div></div>`).join('');
-      const roleName = user.role === 'admin' ? 'Administrator' : (user.role === 'node-host' ? 'Node Host' : 'Community Member');
-      const profilePic = user.profilePicture;
-      const profileHtml = `<div class="profile-header-large"><div class="profile-avatar-large" style="background-image: url('${profilePic||''}'); background-size: cover; background-position: center;">${!profilePic ? (user.fullName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase() || 'U') : ''}</div><div class="profile-name-large">${user.fullName}</div><div class="profile-email-large">${user.email}</div><div class="role-badge-large">${roleName}</div></div>${user.bio ? `<div class="profile-bio-large">${user.bio}</div>` : ''}<div class="profile-info-grid">${user.location ? `<div class="profile-info-item"><i class="fas fa-map-marker-alt"></i> ${user.location}</div>` : ''}${user.website ? `<div class="profile-info-item"><i class="fas fa-globe"></i> <a href="${user.website}" target="_blank">${user.website}</a></div>` : ''}${user.address?.city ? `<div class="profile-info-item"><i class="fas fa-home"></i> ${user.address.city}, ${user.address.province}</div>` : ''}<div class="profile-info-item"><i class="fas fa-calendar-alt"></i> Joined ${joinDate}</div></div><div class="profile-stats"><div class="profile-stat"><div class="profile-stat-number">${postCount}</div><div class="profile-stat-label">Posts</div></div><div class="profile-stat"><div class="profile-stat-number">${totalLikes}</div><div class="profile-stat-label">Likes Received</div></div></div><button class="profile-message-btn" onclick="openChatAndCloseProfile('${user.email}')"><i class="fas fa-comment-dots"></i> Send Message</button><div class="profile-posts-section"><h3>📝 ${user.fullName}'s Posts</h3><div class="profile-posts-grid">${postsHtml}</div></div>`;
-      document.getElementById('profilePageContent').innerHTML = profileHtml;
-    };
-    document.getElementById('closeProfilePageBtn').addEventListener('click', () => {
-      document.getElementById('profilePageTab').style.display = 'none';
-      setActiveTab('members');
+  }
+  if (agreeTermsBtn) {
+    agreeTermsBtn.addEventListener('click', () => {
+      termsModal.style.display = 'none';
+      if (privacyCheckbox) privacyCheckbox.checked = true;
+      if (typeof showToast === 'function') showToast('✓ You have agreed to the Terms of Service');
     });
-    window.openChatAndCloseProfile = function(email) {
-      document.getElementById('profilePageTab').style.display = 'none';
-      openChat(email);
-    };
+  }
 
-    // ===== UPDATE STATS & ONLINE =====
-    function updateStats() {
-      const users = getUsers();
-      const posts = getPosts();
-      const onlineCount = users.filter(u => u.lastSeen && (new Date() - new Date(u.lastSeen)) < 60000 && u.email !== currentUser?.email).length;
-      document.getElementById('quickMembers').textContent = users.length;
-      document.getElementById('quickPosts').textContent = posts.length;
-      document.getElementById('statTotalMembers').textContent = users.length;
-      document.getElementById('statOnlineMembers').textContent = onlineCount;
-      document.getElementById('statHostMembers').textContent = users.filter(u => u.role === 'node-host').length;
-      document.getElementById('statTotalPosts').textContent = posts.length;
-      const onlineUsers = users.filter(u => u.lastSeen && (new Date() - new Date(u.lastSeen)) < 60000 && u.email !== currentUser?.email);
-      let onlineHtml = '';
-      onlineUsers.forEach(u => { onlineHtml += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px; cursor:pointer;" onclick="openChat('${u.email}')"><div class="status-dot" style="background:#22c55e;"></div><span>${u.fullName}</span></div>`; });
-      document.getElementById('onlineMembersList').innerHTML = onlineHtml || '<p style="color:#64748b;">No online members</p>';
-    }
+  window.addEventListener('click', (e) => {
+    if (e.target === privacyModal) privacyModal.style.display = 'none';
+    if (e.target === termsModal) termsModal.style.display = 'none';
+  });
 
-    function startMessageCheck() {
-      if (messageCheckInterval) clearInterval(messageCheckInterval);
-      messageCheckInterval = setInterval(() => {
-        if (currentUser) {
-          loadConversations();
-          if (currentChatWith) loadChatMessages(currentChatWith);
-          updateStats();
-        }
-      }, 3000);
-    }
-
-    // ===== LOGOUT =====
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      if (messageCheckInterval) clearInterval(messageCheckInterval);
-      if (currentUser) {
-        const users = getUsers();
-        const user = users.find(u => u.email === currentUser.email);
-        if (user) { user.lastSeen = new Date().toISOString(); saveUsers(users); }
-      }
-      currentUser = null;
-      currentChatWith = null;
-      document.getElementById('mainAppCard').style.display = 'none';
-      document.getElementById('loginCard').style.display = 'block';
-      document.getElementById('loginEmail').value = '';
-      document.getElementById('loginPassword').value = '';
-      showToast('✓ Logged out');
+  // ===== MODERN NAVBAR & HERO INTERACTIONS =====
+  const menuToggle = document.getElementById('mobileMenuBtn');
+  const navLinksDiv = document.getElementById('navLinks');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      navLinksDiv.classList.toggle('show');
     });
+  }
 
-    // ===== EVENTS =====
-    function getEvents() { return JSON.parse(localStorage.getItem(EVENTS_KEY)) || []; }
-    function saveEvents(events) { localStorage.setItem(EVENTS_KEY, JSON.stringify(events)); }
-    function createEvent(eventData) { const events = getEvents(); const newEvent = { id: Date.now().toString(), ...eventData, createdAt: new Date().toISOString(), attendees: [] }; events.push(newEvent); saveEvents(events); return newEvent; }
-    function rsvpEvent(eventId, userEmail, action) { const events = getEvents(); const event = events.find(e => e.id === eventId); if (!event) return false; if (action === 'join') { if (!event.attendees.includes(userEmail)) event.attendees.push(userEmail); } else if (action === 'leave') { event.attendees = event.attendees.filter(email => email !== userEmail); } saveEvents(events); return true; }
-    function deleteEvent(eventId) { let events = getEvents(); events = events.filter(e => e.id !== eventId); saveEvents(events); }
-    function loadEvents() {
-      const events = getEvents().sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
-      const container = document.getElementById('eventsList');
-      if (!container) return;
-      if (events.length === 0) { container.innerHTML = '<div class="empty-state">No events yet. Create one!</div>'; return; }
-      let html = '';
-      events.forEach(event => {
-        const isAttending = event.attendees.includes(currentUser.email);
-        const attendeeCount = event.attendees.length;
-        const eventDate = new Date(event.datetime).toLocaleString();
-        html += `<div class="event-card"><div class="event-header"><h3>${escapeHtml(event.title)}</h3><span class="event-date"><i class="far fa-calendar-alt"></i> ${eventDate}</span></div><p class="event-desc">${escapeHtml(event.description)}</p><div class="event-location"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(event.location)}</div><div class="event-footer"><span class="event-attendees"><i class="fas fa-users"></i> ${attendeeCount} attending</span><button class="btn-small rsvp-btn ${isAttending ? 'btn-leave' : 'btn-join'}" data-event-id="${event.id}">${isAttending ? '❌ Leave Event' : '✅ Join Event'}</button>${currentUser.role === 'admin' ? `<button class="btn-small btn-delete delete-event-btn" data-event-id="${event.id}">Delete</button>` : ''}</div></div>`;
-      });
-      container.innerHTML = html;
-      document.querySelectorAll('.rsvp-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const eventId = btn.dataset.eventId;
-          const isAttending = btn.classList.contains('btn-leave');
-          if (isAttending) { rsvpEvent(eventId, currentUser.email, 'leave'); showToast('You left the event'); }
-          else { rsvpEvent(eventId, currentUser.email, 'join'); showToast('You joined the event'); }
-          loadEvents();
-        });
-      });
-      document.querySelectorAll('.delete-event-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (confirm('Delete this event?')) { deleteEvent(btn.dataset.eventId); loadEvents(); showToast('Event deleted'); }
-        });
-      });
-    }
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
-    const createEventBtn = document.getElementById('createEventBtn');
-    const createEventModal = document.getElementById('createEventModal');
-    const closeEventModal = document.getElementById('closeEventModal');
-    const saveEventBtn = document.getElementById('saveEventBtn');
-    if (createEventBtn) createEventBtn.addEventListener('click', () => createEventModal.style.display = 'flex');
-    if (closeEventModal) closeEventModal.addEventListener('click', () => createEventModal.style.display = 'none');
-    if (saveEventBtn) {
-      saveEventBtn.addEventListener('click', () => {
-        const title = document.getElementById('eventTitle').value.trim();
-        const description = document.getElementById('eventDesc').value.trim();
-        const datetime = document.getElementById('eventDatetime').value;
-        const location = document.getElementById('eventLocation').value.trim();
-        if (!title || !datetime) return showToast('Please fill in title and date/time', true);
-        createEvent({ title, description, datetime, location });
-        createEventModal.style.display = 'none';
-        document.getElementById('eventTitle').value = '';
-        document.getElementById('eventDesc').value = '';
-        document.getElementById('eventDatetime').value = '';
-        document.getElementById('eventLocation').value = '';
-        showToast('Event created!');
-        if (document.getElementById('eventsTab').style.display !== 'none') loadEvents();
-      });
-    }
+  function updateHeroStats(membersCount, postsCount) {
+    const statMembers = document.getElementById('statMembersHero');
+    const statPosts = document.getElementById('statPostsHero');
+    if (statMembers) statMembers.textContent = membersCount;
+    if (statPosts) statPosts.textContent = postsCount;
+  }
 
-    // ===== ADMIN DASHBOARD =====
-    function refreshAdminPanel() {
-      const users = getUsers();
-      const posts = getPosts();
-      const adminStats = document.getElementById('adminStats');
-      const usersTableBody = document.querySelector('#usersTable tbody');
-      if (adminStats) adminStats.innerHTML = `<div class="stat-card">Total Users: ${users.length}</div><div class="stat-card">Total Posts: ${posts.length}</div><div class="stat-card">Admins: ${users.filter(u => u.role === 'admin').length}</div>`;
-      if (usersTableBody) {
-        usersTableBody.innerHTML = users.map(user => `<tr><td>${escapeHtml(user.fullName)}</td><td>${escapeHtml(user.email)}</td><td>${escapeHtml(user.role)}</td><td><button class="action-btn danger" data-user-id="${user.id}">Delete User</button></td></tr>`).join('');
-        document.querySelectorAll('[data-user-id]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const userId = btn.dataset.userId;
-            if (confirm('Delete this user and all their posts?')) {
-              let usersArr = getUsers();
-              let postsArr = getPosts();
-              const userToDelete = usersArr.find(u => u.id === userId);
-              usersArr = usersArr.filter(u => u.id !== userId);
-              if (userToDelete) postsArr = postsArr.filter(p => p.author !== userToDelete.email);
-              saveUsers(usersArr);
-              savePosts(postsArr);
-              if (currentUser && currentUser.id === userId) { document.getElementById('logoutBtn').click(); }
-              else { refreshAdminPanel(); loadMembers(); loadFeed(); updateStats(); }
-              showToast('User deleted');
-            }
-          });
-        });
-      }
+  setInterval(() => {
+    const quickMembers = document.getElementById('quickMembers');
+    const quickPosts = document.getElementById('quickPosts');
+    if (quickMembers && quickPosts) {
+      const members = parseInt(quickMembers.innerText) || 0;
+      const posts = parseInt(quickPosts.innerText) || 0;
+      updateHeroStats(members, posts);
     }
-    const adminToggleBtn = document.getElementById('adminToggleBtn');
-    const adminDashboard = document.getElementById('adminDashboard');
-    const closeAdminBtn = document.getElementById('closeAdminBtn');
-    if (adminToggleBtn && adminDashboard) {
-      adminToggleBtn.addEventListener('click', () => {
-        if (currentUser && currentUser.role === 'admin') {
-          adminDashboard.classList.toggle('visible');
-          if (adminDashboard.classList.contains('visible')) refreshAdminPanel();
-        } else showToast('Admin access only', true);
-      });
-    }
-    if (closeAdminBtn) closeAdminBtn.addEventListener('click', () => adminDashboard.classList.remove('visible'));
-
-    // ===== DARK MODE =====
-    function initDarkMode() {
-      const isDark = localStorage.getItem('darkMode') === 'true';
-      if (isDark) document.body.classList.add('dark');
-      const toggle = document.getElementById('darkModeToggleNav');
-      if (toggle) toggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark'));
-      });
-    }
-    initDarkMode();
-
-    // ===== MOBILE MENU =====
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const navLinksDiv = document.getElementById('navLinks');
-    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => navLinksDiv.classList.toggle('show'));
-
-    // ===== SCREEN SIZE =====
-    function checkScreenSize() {
-      const rightSidebar = document.querySelector('.right-sidebar');
-      if (window.innerWidth >= 1024 && rightSidebar) rightSidebar.style.display = 'block';
-      else if (rightSidebar) rightSidebar.style.display = 'none';
-    }
-    window.addEventListener('resize', checkScreenSize);
-    checkScreenSize();
-
-    hideLoading();
-  })();
+  }, 2000);
 </script>
 </body>
 </html>
